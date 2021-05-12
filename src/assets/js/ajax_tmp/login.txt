@@ -1,0 +1,4 @@
+{
+  "email": "administrator@seuphone.com.br",
+  "password": "123456"
+}
