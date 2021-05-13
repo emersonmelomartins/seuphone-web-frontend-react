@@ -4,13 +4,17 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { RegisterContainer } from "./styles";
-
+import { useLoading } from "../../hooks/useLoading";
 import { CreateUser } from "../../services/userService";
+import { cpfMask } from "../../util/cpfMask";
 
 export function Register() {
-  const { register, setValue, handleSubmit, watch } = useForm();
+  const { register, setValue, getValues, handleSubmit, watch } = useForm();
+
+  const { setLoading } = useLoading();
 
   const [validationState, setValidationState] = useState([]);
+  const [cpfWithMask, setCpfWithMask] = useState("");
 
   async function viacepSearch(event) {
     const valor = event.target.value;
@@ -66,11 +70,11 @@ export function Register() {
       toast.error("Você precisa informar o nome.");
     }
 
-    if (form.cpf === undefined || form.cpf === null || form.cpf === "") {
-      hasError = true;
-      validationState.cpf = "error";
-      toast.error("Você precisa informar o cpf.");
-    }
+    // if (form.cpf === undefined || form.cpf === null || form.cpf === "") {
+    //   hasError = true;
+    //   validationState.cpf = "error";
+    //   toast.error("Você precisa informar o cpf.");
+    // }
 
     if (
       form.birthdate === undefined ||
@@ -124,19 +128,47 @@ export function Register() {
       toast.error("Você precisa informar o estado.");
     }
 
+    var mailPattern = new RegExp(
+      /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
+    );
+
+    if (!mailPattern.test(getValues("email"))) {
+      hasError = true;
+      validationState.email = "error";
+      toast.error("E-mail informado inválido, tente novamente.");
+    }
+
     setValidationState(validationState);
     return hasError;
   };
 
   const createNewUser = (form) => {
+    setLoading(true);
     CreateUser(form).then(
       (resp) => {
+        setLoading(false);
         toast.success("Usuário criado com sucesso!");
       },
       (error) => {
-        toast.error(error.response.data.title);
+        setLoading(false);
+        const erro = error.response.data;
+        if (erro !== undefined) {
+          if(typeof erro.errors === 'object') {
+            Object.values(erro.errors).forEach((e) => {
+              toast.error(e[0]);
+            });
+          } else {
+            toast.error(erro);
+          }
+        } else {
+          toast.error("Ocorreu um erro interno.");
+        }
       }
     );
+  };
+
+  const onChangeCpf = (event) => {
+    setCpfWithMask(cpfMask(event.target.value));
   };
 
   function onSubmit(form) {
@@ -243,6 +275,7 @@ export function Register() {
                 name="genre"
                 {...register("genre")}
                 className="form-control"
+                defaultValue=""
               >
                 <option value="">Selecione o sexo...</option>
                 <option value="M">Masculino</option>
@@ -262,6 +295,9 @@ export function Register() {
                 id="cpf"
                 name="cpf"
                 placeholder="Ex: 123.456.789-10"
+                maxLength={14}
+                onChange={onChangeCpf}
+                value={cpfWithMask}
                 style={
                   validationState.cpf !== undefined
                     ? { border: "1px solid red" }
@@ -280,6 +316,7 @@ export function Register() {
                 className="form-control"
                 id="birthdate"
                 name="birthdate"
+                defaultValue=""
                 style={
                   validationState.birthdate !== undefined
                     ? { border: "1px solid red" }
