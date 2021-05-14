@@ -3,16 +3,14 @@ import { createContext, useContext, useState } from "react";
 import { useHistory } from "react-router";
 import { useLoading } from "./useLoading";
 import { toast } from "react-toastify";
-import api from "../services/api";
 import { UserAuthenticate } from "../services/userService";
 
 const AuthContext = createContext({});
 
 export function AuthProvider({ children }) {
-
   const history = useHistory();
 
-   const { setLoading } = useLoading();
+  const { setLoading } = useLoading();
 
   const [user, setUser] = useState(() => {
     const storagedUser = localStorage.getItem("@Seuphone::user");
@@ -23,18 +21,6 @@ export function AuthProvider({ children }) {
 
     return null;
   });
-
-  const [token, setToken] = useState(() => {
-    const storagedToken = localStorage.getItem("@Seuphone::token");
-
-    if (storagedToken) {
-      return JSON.parse(storagedToken);
-    }
-
-    return null;
-  });
-
-     
 
   function Authenticate(form) {
     setLoading(true);
@@ -48,7 +34,7 @@ export function AuthProvider({ children }) {
         };
 
         setUser(userInfo);
-        api.defaults.headers.Authorization = `Bearer ${token}`;
+        // api.defaults.headers.Authorization = `Bearer ${token}`;
 
         toast.success(
           "Usuário autenticado, redirecionando para página inicial"
@@ -56,7 +42,6 @@ export function AuthProvider({ children }) {
 
         history.push("/");
 
-        localStorage.setItem("@Seuphone::token", token);
         localStorage.setItem("@Seuphone::user", JSON.stringify(userInfo));
 
         setLoading(false);
@@ -71,15 +56,13 @@ export function AuthProvider({ children }) {
 
   function Logout() {
     setUser(null);
-    setToken(null);
     localStorage.removeItem("@Seuphone::user");
-    localStorage.removeItem("@Seuphone::token");
     history.push("/login");
   }
 
   return (
     <AuthContext.Provider
-      value={{ signed: Boolean(user), user, Authenticate, Logout, token }}
+      value={{ signed: Boolean(user), user, Authenticate, Logout }}
     >
       {children}
     </AuthContext.Provider>

@@ -8,10 +8,14 @@ const api = axios.create({
 
 
 api.interceptors.request.use(async (config) => {
-  const token = localStorage.getItem("@Seuphone::token");
-  if (token !== undefined || token !== "" || token !== null) {
+  const storagedUser = localStorage.getItem("@Seuphone::user");
+
+  if(storagedUser !== null) {
+    const { token } = JSON.parse(localStorage.getItem("@Seuphone::user"));
+    
     config.headers.Authorization = `Bearer ${token}`;
   }
+  
   return config;
 });
 
