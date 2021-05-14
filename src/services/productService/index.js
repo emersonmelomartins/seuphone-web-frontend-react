@@ -2,8 +2,8 @@ import api from "../api";
 const route = "products";
 
 
-export async function GetAllProduct() {
-  return await api.get(`/${route}`);
+export async function GetAllProduct(productName) {
+  return await api.get(`/${route}?productName=${productName}`);
 }
 
 export async function GetProduct(id) {

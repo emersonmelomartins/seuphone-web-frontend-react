@@ -151,16 +151,20 @@ export function Register() {
       },
       (error) => {
         setLoading(false);
-        const erro = error.response.data;
-        if (erro !== undefined) {
-          if(typeof erro.errors === 'object') {
-            Object.values(erro.errors).forEach((e) => {
-              toast.error(e[0]);
-            });
+        try {
+          const erro = error.response.data;
+          if (erro !== undefined) {
+            if (typeof erro.errors === "object") {
+              Object.values(erro.errors).forEach((e) => {
+                toast.error(e[0]);
+              });
+            } else {
+              toast.error(erro);
+            }
           } else {
-            toast.error(erro);
+            toast.error("Não foi possível carregar os dados.");
           }
-        } else {
+        } catch (e) {
           toast.error("Ocorreu um erro interno.");
         }
       }

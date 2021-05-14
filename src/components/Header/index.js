@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiSearch, FiShoppingCart } from "react-icons/fi";
 
@@ -13,6 +13,9 @@ export function Header() {
   const { signed, Logout, user } = useAuth();
 
   const cartSize = cart.length;
+
+  const [productField, setProductField] = useState('');
+
 
   return (
     <HeaderContainer>
@@ -33,13 +36,16 @@ export function Header() {
               type="search"
               placeholder="Buscar por produtos..."
               aria-label="Search"
+              value={productField}
+              onChange={(event) => setProductField(event.target.value)}
             />
-            <button
+            <Link
               className="btn btn-success btn-seuphone-outline-white btn-search"
               type="submit"
+              to={`/products?productName=${productField}`}
             >
               <FiSearch size="0.9rem" />
-            </button>
+            </Link>
           </form>
 
           {signed ? (

@@ -6,25 +6,46 @@ import { ProductCard } from "../../components/ProductCard";
 import { GetAllProduct } from "../../services/productService";
 
 import { ProductsContainer } from "./styles";
-import { base64Image } from "../../assets/base64test";
 import { useLoading } from "../../hooks/useLoading";
+import { useLocation } from "react-router";
 
 export function Products() {
   const [products, setProducts] = useState([]);
 
   const { setLoading } = useLoading();
 
+  const location = useLocation();
+
   useEffect(() => {
     setLoading(true);
-    GetAllProduct().then(resp => {
+
+    const productName = new URLSearchParams(location.search).get("productName") ?? "";
+
+    GetAllProduct(productName).then(resp => {
       setProducts(resp.data);
       setLoading(false);
     },
     (error) => {
-      toast.error("Ocorreu um erro ao carregar os produtos!");
-      setLoading(false);
+        setLoading(false);
+        try {
+          const erro = error.response.data;
+          if (erro !== undefined) {
+            if(typeof erro.errors === 'object') {
+              Object.values(erro.errors).forEach((e) => {
+                toast.error(e[0]);
+              });
+            } else {
+              toast.error(erro);
+            }
+          } else {
+            toast.error("Não foi possível carregar os dados.");
+          }
+
+        } catch (e) {
+          toast.error("Ocorreu um erro interno.");
+        }
     });
-  }, [setLoading]);
+  }, [setLoading, location]);
 
   return (
     <ProductsContainer>
@@ -157,7 +178,7 @@ export function Products() {
           <div className="d-flex flex-wrap">
             
             {products.map(product => (
-              <ProductCard key={product.id} product={{...product, image: base64Image}} productQtd={1} />
+              <ProductCard key={product.id} product={product} productQtd={1} />
             ))}
             
           </div>

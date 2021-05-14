@@ -13,7 +13,7 @@ export function ProductCard({ product, productQtd }) {
 
   return (
     <ProductCardContainer className="card product-card">
-      <img src={product.image} alt={product.model} />
+        <img src={product.image} alt={product.model} />
       <div className="card-body">
         <div className="panel-body">
           <Link to={"/products/" + product.id}>
