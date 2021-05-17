@@ -15,5 +15,5 @@ export async function CreateUser(form) {
 }
 
 export async function UpdateUserAddress(form) {
-  return await api.put(`/${route}`, form);
+  return await api.put(`/${route}/${form.id}`, form);
 }
