@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -12,6 +12,8 @@ export function Register() {
   const { register, setValue, getValues, handleSubmit, watch } = useForm();
 
   const { setLoading } = useLoading();
+
+  const history = useHistory();
 
   const [validationState, setValidationState] = useState([]);
   const [cpfWithMask, setCpfWithMask] = useState("");
@@ -148,6 +150,7 @@ export function Register() {
       (resp) => {
         setLoading(false);
         toast.success("Usuário criado com sucesso!");
+        history.push("/login");
       },
       (error) => {
         setLoading(false);

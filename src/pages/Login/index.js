@@ -26,7 +26,7 @@ export function Login() {
         <form className="bg-light p-5 mx-auto">
           <h1 className="py-2 text-uppercase">Faça seu login</h1>
           <div className="form-group">
-            <label htmlFor="email">Usuário</label>
+            <label htmlFor="email">E-mail</label>
             <input
               {...register("email")}
               defaultValue=""

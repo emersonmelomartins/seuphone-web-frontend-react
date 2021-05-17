@@ -1,9 +1,37 @@
-import React from "react";
-import { MdPictureAsPdf } from "react-icons/md";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
 import { Tab, Nav } from "react-bootstrap";
-import { ProfileContainer, Orders } from "./styles";
+import { ProfileContainer } from "./styles";
+import { useAuth } from "../../hooks/useAuth";
+import { GetUser } from "../../services/userService";
+import { OrdersTab } from "./OrdersTab";
 
 export function Profile() {
+  const { user } = useAuth();
+
+  const [userInfo, setUserInfo] = useState({});
+
+  const userid = user.decodedToken.nameid;
+
+  useEffect(() => {
+    _getUser();
+  }, []);
+
+  const _getUser = () => {
+    GetUser(userid).then(resp => {
+      const [date,] = new Date(resp.data.birthDate).toLocaleString().split(" ");
+      resp.data.birthDate = date;
+      setUserInfo(resp.data);
+      console.log(resp.data);
+    },
+    (error) => {
+
+    })
+  }
+
+
+  
+
   return (
     <ProfileContainer>
       <div className="empty-container seuphone-background"></div>
@@ -29,74 +57,7 @@ export function Profile() {
               <div className="col-sm-10">
                 <Tab.Content>
                   <Tab.Pane eventKey="orders">
-                    <Orders>
-                      <thead>
-                        <tr>
-                          <th>Nº Pedido</th>
-                          <th>Situação</th>
-                          <th>Duração Contrato</th>
-                          <th>Total</th>
-                          <th>PDF Contrato</th>
-                          <th />
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>1123</td>
-                          <td>
-                            <span className="text-warning">Processando</span>
-                          </td>
-                          <td>2 anos</td>
-                          <td>
-                            <strong>R$ 9.999,99</strong>
-                          </td>
-                          <td>
-                            <button type="button">
-                              <MdPictureAsPdf size={20} />
-                            </button>
-                          </td>
-                          <td>
-                            <button type="button">Ver detalhes</button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>1124</td>
-                          <td>
-                            <span className="text-success">Em andamento</span>
-                          </td>
-                          <td>2 anos</td>
-                          <td>
-                            <strong>R$ 9.999,99</strong>
-                          </td>
-                          <td>
-                            <button type="button">
-                              <MdPictureAsPdf size={20} />
-                            </button>
-                          </td>
-                          <td>
-                            <button type="button">Ver detalhes</button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>1125</td>
-                          <td>
-                            <span className="text-danger">Cancelado</span>
-                          </td>
-                          <td>2 anos</td>
-                          <td>
-                            <strong>R$ 9.999,99</strong>
-                          </td>
-                          <td>
-                            <button type="button">
-                              <MdPictureAsPdf size={20} />
-                            </button>
-                          </td>
-                          <td>
-                            <button type="button">Ver detalhes</button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </Orders>
+                    <OrdersTab userid={userid} />
                   </Tab.Pane>
                   <Tab.Pane eventKey="data">
                     <div className="form-row">
@@ -107,7 +68,7 @@ export function Profile() {
                           type="email"
                           className="form-control"
                           id="input-email"
-                          value="seuemail@email.com"
+                          value={userInfo.email}
                         />
                       </div>
                     </div>
@@ -120,7 +81,7 @@ export function Profile() {
                           type="text"
                           className="form-control"
                           id="input-name"
-                          value="João da Silva"
+                          value={userInfo.name}
                         />
                       </div>
                     </div>
@@ -132,9 +93,10 @@ export function Profile() {
                           id="input-genre"
                           className="form-control"
                           disabled
+                          value={userInfo.genre}
                         >
                           <option value="">Selecione o sexo...</option>
-                          <option selected value="M">
+                          <option value="M">
                             Masculino
                           </option>
                           <option value="F">Feminino</option>
@@ -151,7 +113,7 @@ export function Profile() {
                           type="text"
                           className="form-control"
                           id="input-cpf"
-                          value="123.456.789-10"
+                          value={userInfo.cpf}
                         />
                       </div>
                     </div>
@@ -161,8 +123,8 @@ export function Profile() {
                         <label htmlFor="input-date">Data de Nascimento</label>
                         <input
                           disabled
-                          value="1995-06-05"
-                          type="date"
+                          value={userInfo.birthDate}
+                          type="text"
                           className="form-control"
                           id="input-date"
                         />
@@ -177,11 +139,7 @@ export function Profile() {
                           type="text"
                           className="form-control"
                           id="input-zipcode"
-                          size="10"
-                          maxLength="9"
-                          defaultValue=""
-                          value="09112-000"
-                          // onBlur={pesquisacep}
+                          defaultValue={userInfo.zipCode}
                         />
                       </div>
                     </div>
@@ -193,7 +151,7 @@ export function Profile() {
                           type="text"
                           className="form-control"
                           id="input-address"
-                          value="Rua Machado de Assis"
+                          defaultValue={userInfo.address}
                         />
                       </div>
                     </div>
@@ -205,7 +163,7 @@ export function Profile() {
                           type="text"
                           className="form-control"
                           id="input-district"
-                          value="Bota Fogo"
+                          defaultValue={userInfo.district}
                         />
                       </div>
 
@@ -215,7 +173,7 @@ export function Profile() {
                           type="text"
                           className="form-control"
                           id="input-city"
-                          value="Mauá"
+                          defaultValue={userInfo.city}
                         />
                       </div>
                     </div>
@@ -223,7 +181,7 @@ export function Profile() {
                     <div className="form-row">
                       <div className="form-group col-md-4">
                         <label htmlFor="input-state">Estado</label>
-                        <select id="input-state" className="form-control">
+                        <select id="input-state" className="form-control" value={userInfo.state}>
                           <option value="">Selecione o estado...</option>
                           <option value="AC">Acre</option>
                           <option value="AL">Alagoas</option>
