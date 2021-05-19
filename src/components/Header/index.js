@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiSearch, FiShoppingCart } from "react-icons/fi";
 
@@ -7,15 +7,43 @@ import logoImg from "../../assets/img/logo.png";
 import { useCart } from "../../hooks/useCart";
 import { Button, Nav, Navbar, Dropdown } from "react-bootstrap";
 import { useAuth } from "../../hooks/useAuth";
+import { GetUser } from "../../services/userService";
 
 export function Header() {
   const { cart } = useCart();
   const { signed, Logout, user } = useAuth();
+  const [userInfo, setUserInfo] = useState({});
+  const [hasAdmin, setHasAdmin] = useState(false);
+  const [hasUser, setHasUser] = useState(false);
 
   const cartSize = cart.length;
 
   const [productField, setProductField] = useState('');
 
+  const userId = user.decodedToken.nameid
+
+  useEffect(() => {
+    _getUser(userId)
+  }, []);
+
+
+  const _getUser = (userId) =>
+  new Promise((resolve, reject) => {
+    GetUser(userId).then(
+      (resp) => {
+        //  setUserInfo(resp.data);       
+         resp.data.userRoles.forEach(item => console.log(item.role.roleName) === "ROLE_ADMIN" && setHasAdmin(true) || item.role.roleName === "ROLE_CLIENTE" && setHasUser(true)) 
+        //  resp.data.userRoles.forEach(item => item.role.roleName === "ROLE_CLIENTE" && setHasUser(true))   
+         
+         console.log(hasAdmin)
+         console.log(hasUser)
+        resolve();
+      },
+      (error) => {
+        reject()
+      }
+    );
+  });
 
   return (
     <HeaderContainer>
