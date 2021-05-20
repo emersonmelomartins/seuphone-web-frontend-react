@@ -21,25 +21,24 @@ export function Header() {
 
 
   useEffect(() => {
-    if (user !== null){
+    if (user === null){
+    setHasAdmin(false)
+    }
+    else {
       _getUser(user.decodedToken.nameid)
     }
   }, [user, hasAdmin]);
 
 
-  const _getUser = (userId) =>
-  new Promise((resolve, reject) => {
+  const _getUser = (userId) => {
     GetUser(userId).then(
       (resp) => {
         resp.data.userRoles.forEach(item => item.role.roleName === "ROLE_ADMIN" && setHasAdmin(true)) 
-         
-        resolve();
       },
       (error) => {
-        reject()
       }
     );
-  });
+  };
 
   return (
     <HeaderContainer>
