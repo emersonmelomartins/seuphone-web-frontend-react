@@ -19,6 +19,7 @@ export function ProductDetail() {
     setLoading(true);
     GetProduct(id).then(
       (resp) => {
+        console.log(resp.data)
         setProduct({
           ...resp.data,
           price: resp.data.price.toLocaleString("pt-BR", {
@@ -77,13 +78,15 @@ export function ProductDetail() {
                 </div>
               </div>
               <div className="col-md-6 text-left">
-                <h1 className="text-uppercase">{product.model}</h1>
-                <p style={{ color: "gray" }}>Cód: {product.id}</p>
+                <h1 className="text-uppercase">{product.description}</h1>
+                <p style={{color: "gray", fontSize: '12px', lineHeight: '10px'}}>Cód: {product.id}</p>
+                <p style={{color: "gray", fontSize: '12px', lineHeight: '10px'}}>Fornecedor: {product.provider && product.provider.companyName}</p>
 
-                <label style={{ color: "gray" }}>Descrição:</label>
-                <p>{product.description}</p>
+                <p style={{color: "gray", fontSize: '12px', lineHeight: '10px'}}>Modelo: {product.model}</p>
+                <p style={{color: "gray", fontSize: '12px', lineHeight: '10px'}}>Cor: {product.color}</p>
+                <p style={{color: "gray", fontSize: '12px', lineHeight: '10px'}}>Armazenamento: {product.storage}</p>
 
-                <label style={{ color: "gray" }}>Preço:</label>
+                <label style={{ color: "gray", lineHeight: '5px' }}>Preço:</label>
                 <p style={{ fontSize: "28px" }}>
                   <sup style={{ fontSize: "16px" }}>R$</sup>
                   <span style={{ color: "#3242CD" }}> {product.price}</span>
