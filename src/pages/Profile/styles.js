@@ -37,7 +37,7 @@ export const Orders = styled.table`
   }
 
   tbody td {
-    padding: 15px;
+    padding: 10px;
     border-bottom: 1px solid #eee;
   }
 

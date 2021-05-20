@@ -8,8 +8,6 @@ import {
 } from "react-icons/md";
 
 import { useCart } from "../../hooks/useCart";
-
-import { base64Image } from "../../assets/base64test";
 import { formatPrice } from "../../util/formatPrice";
 import { Link } from "react-router-dom";
 
@@ -77,10 +75,10 @@ export function Cart() {
                 {formattedCart.map((product) => (
                   <tr key={product.id}>
                     <td>
-                      <img src={base64Image} alt="" />
+                      <img src={product.image} alt="" />
                     </td>
                     <td>
-                      <strong>{product.model}</strong>
+                      <strong>{product.description}</strong>
                       <span>{product.price}</span>
                     </td>
                     <td>
@@ -123,12 +121,14 @@ export function Cart() {
           )}
 
           <footer>
-            <button
-              type="button"
-              className="btn btn-seuphone-outline-black btn-rounded-seuphone"
-            >
-              Ir para próximo passo
-            </button>
+            <Link to="/contract">
+              <button
+                type="button"
+                className="btn btn-seuphone-outline-black btn-rounded-seuphone"
+              >
+                Ir para próximo passo
+              </button>
+            </Link>
 
             <Total>
               <span>TOTAL</span>

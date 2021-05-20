@@ -17,9 +17,9 @@ export function ProductCard({ product, productQtd }) {
       <div className="card-body">
         <div className="panel-body">
           <Link to={"/products/" + product.id}>
-            <h5>{product.model}</h5>
+            <h5>{product.description}</h5>
           </Link>
-          <p>{product.description}</p>
+          <p>Modelo: {product.model}</p>
           <p>{product.stockQuantity} unidade(s) disponível(eis)</p>
           <p>
             {formatPrice(product.price)}

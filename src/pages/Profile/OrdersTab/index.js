@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { MdPictureAsPdf } from "react-icons/md";
+import { Link } from "react-router-dom";
 import { GetAllOrderByUser } from "../../../services/orderService";
 import { formatPrice } from "../../../util/formatPrice";
 import { Orders } from "../styles";
@@ -61,7 +62,12 @@ export function OrdersTab({ userid }) {
                   </button>
                 </td>
                 <td>
-                  <button type="button">Ver detalhes</button>
+                  <Link to={"/user-order-detail/" + order.id}>
+                    <button>
+                      Ver detalhes
+
+                    </button>
+                  </Link>
                 </td>
               </tr>
             ))}

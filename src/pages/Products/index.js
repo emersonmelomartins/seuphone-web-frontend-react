@@ -21,7 +21,10 @@ export function Products() {
 
     const productName = new URLSearchParams(location.search).get("productName") ?? "";
 
-    GetAllProduct(productName).then(resp => {
+    const obj = {
+      productName
+    }
+    GetAllProduct(obj).then(resp => {
       setProducts(resp.data);
       setLoading(false);
     },

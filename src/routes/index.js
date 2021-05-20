@@ -8,6 +8,9 @@ import { ProductDetail } from '../pages/ProductDetail';
 import { Products } from '../pages/Products';
 import { Profile } from '../pages/Profile';
 import { Register } from '../pages/Register';
+import { ContractTerms } from '../pages/ContractTerms';
+import { UserOrderDetail } from '../pages/UserOrderDetail';
+import { CartPayment } from '../pages/CartPayment';
 
 export function Routes() {
 
@@ -16,15 +19,23 @@ export function Routes() {
       <Route path="/" exact component={Home} />
 
       <Route path="/login" exact component={Login} />
+
       <Route path="/register" exact component={Register} />
 
       <Route path="/products" exact component={Products} />
+
       <Route path="/products/:id" exact component={ProductDetail} />
       
       <Route path="/cart" exact component={Cart} />
 
-
       <PrivateRoute path="/profile" exact component={Profile} />
+
+      <PrivateRoute path="/user-order-detail/:id" exact component={UserOrderDetail} />
+
+      <PrivateRoute path="/contract" exact component={ContractTerms} />
+
+      <PrivateRoute path="/cart-payment" exact component={CartPayment} />
+
     </Switch>
   );
 };

@@ -2,8 +2,9 @@ import api from "../api";
 const route = "products";
 
 
-export async function GetAllProduct(productName) {
-  return await api.get(`/${route}?productName=${productName}`);
+export async function GetAllProduct(obj) {
+  console.log(obj);
+  return await api.get(`/${route}?productName=${obj.productName ?? ""}&limit=${obj.limit ?? 0}`);
 }
 
 export async function GetProduct(id) {

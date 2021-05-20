@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 //import { Link } from "react-router-dom";
 import { FaSync, FaTruck, FaShieldAlt, FaMobileAlt } from "react-icons/fa";
 import leasingImg from '../../assets/img/using_phone.png'
@@ -6,9 +6,49 @@ import leasingImg from '../../assets/img/using_phone.png'
 import introImg from "../../assets/img/intro.png";
 import { ProductCard } from "../../components/ProductCard";
 
-import {base64Image} from '../../assets/base64test';
+import { useLoading } from "../../hooks/useLoading";
+import { GetAllProduct } from "../../services/productService";
+import { toast } from "react-toastify";
 
 export function Home() {
+
+    const [products, setProducts] = useState([]);
+
+  const { setLoading } = useLoading();
+
+useEffect(() => {
+    setLoading(true);
+
+    const obj = {
+      limit: 4
+    }
+    GetAllProduct(obj).then(resp => {
+      console.log(resp.data);
+      setProducts(resp.data);
+      setLoading(false);
+    },
+    (error) => {
+        setLoading(false);
+        try {
+          const erro = error.response.data;
+          if (erro !== undefined) {
+            if(typeof erro.errors === 'object') {
+              Object.values(erro.errors).forEach((e) => {
+                toast.error(e[0]);
+              });
+            } else {
+              toast.error(erro);
+            }
+          } else {
+            toast.error("Não foi possível carregar os dados.");
+          }
+
+        } catch (e) {
+          toast.error("Ocorreu um erro interno.");
+        }
+    });
+  }, [setLoading]);
+
   return (
     <>
       <div className="carousel slide carousel-fade" data-ride="carousel">
@@ -91,10 +131,9 @@ export function Home() {
       <div className="d-flex flex-wrap align-items-center justify-content-start">
 
 
-        <ProductCard product={{model: 'xxxxxxxxxxxx', description: 'xxxxxxxxxxxx - Dourado - 128GB', price: 9999.99, image: base64Image}} />
-        <ProductCard product={{model: 'xxxxxxxxxxxx', description: 'xxxxxxxxxxxx - Dourado - 128GB', price: 9999.99, image: base64Image}} />
-        <ProductCard product={{model: 'xxxxxxxxxxxx', description: 'xxxxxxxxxxxx - Dourado - 128GB', price: 9999.99, image: base64Image}} />
-        <ProductCard product={{model: 'xxxxxxxxxxxx', description: 'xxxxxxxxxxxx - Dourado - 128GB', price: 9999.99, image: base64Image}} />
+        {products.map(product => (
+          <ProductCard key={product.id} product={product} productQtd={1} />
+        ))}
 
       </div>
     </div>
