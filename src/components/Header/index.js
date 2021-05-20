@@ -12,31 +12,27 @@ import { GetUser } from "../../services/userService";
 export function Header() {
   const { cart } = useCart();
   const { signed, Logout, user } = useAuth();
-  const [userInfo, setUserInfo] = useState({});
   const [hasAdmin, setHasAdmin] = useState(false);
-  const [hasUser, setHasUser] = useState(false);
+
 
   const cartSize = cart.length;
 
   const [productField, setProductField] = useState('');
 
-  const userId = user.decodedToken.nameid
 
   useEffect(() => {
-    _getUser(userId)
-  }, []);
+    if (user !== null){
+      _getUser(user.decodedToken.nameid)
+    }
+  }, [user, hasAdmin]);
 
 
   const _getUser = (userId) =>
   new Promise((resolve, reject) => {
     GetUser(userId).then(
       (resp) => {
-        //  setUserInfo(resp.data);       
-         resp.data.userRoles.forEach(item => console.log(item.role.roleName) === "ROLE_ADMIN" && setHasAdmin(true) || item.role.roleName === "ROLE_CLIENTE" && setHasUser(true)) 
-        //  resp.data.userRoles.forEach(item => item.role.roleName === "ROLE_CLIENTE" && setHasUser(true))   
+        resp.data.userRoles.forEach(item => item.role.roleName === "ROLE_ADMIN" && setHasAdmin(true)) 
          
-         console.log(hasAdmin)
-         console.log(hasUser)
         resolve();
       },
       (error) => {
@@ -86,6 +82,13 @@ export function Header() {
                 <Dropdown.Item as={Link} to="/profile">
                   Meus Dados
                 </Dropdown.Item>
+
+                {hasAdmin === true ? (
+                    <Dropdown.Item as={Link} to="/panel">
+                      Painel
+                    </Dropdown.Item>
+                ) : ""}
+
                 <Dropdown.Item as={Button} onClick={Logout}>
                   Sair
                 </Dropdown.Item>
