@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiSearch, FiShoppingCart } from "react-icons/fi";
 
@@ -7,15 +7,38 @@ import logoImg from "../../assets/img/logo.png";
 import { useCart } from "../../hooks/useCart";
 import { Button, Nav, Navbar, Dropdown } from "react-bootstrap";
 import { useAuth } from "../../hooks/useAuth";
+import { GetUser } from "../../services/userService";
 
 export function Header() {
   const { cart } = useCart();
   const { signed, Logout, user } = useAuth();
+  const [hasAdmin, setHasAdmin] = useState(false);
+
 
   const cartSize = cart.length;
 
   const [productField, setProductField] = useState('');
 
+
+  useEffect(() => {
+    if (user === null){
+    setHasAdmin(false)
+    }
+    else {
+      _getUser(user.decodedToken.nameid)
+    }
+  }, [user, hasAdmin]);
+
+
+  const _getUser = (userId) => {
+    GetUser(userId).then(
+      (resp) => {
+        resp.data.userRoles.forEach(item => item.role.roleName === "ROLE_ADMIN" && setHasAdmin(true)) 
+      },
+      (error) => {
+      }
+    );
+  };
 
   return (
     <HeaderContainer>
@@ -58,6 +81,13 @@ export function Header() {
                 <Dropdown.Item as={Link} to="/profile">
                   Meus Dados
                 </Dropdown.Item>
+
+                {hasAdmin === true ? (
+                    <Dropdown.Item as={Link} to="/panel">
+                      Painel
+                    </Dropdown.Item>
+                ) : ""}
+
                 <Dropdown.Item as={Button} onClick={Logout}>
                   Sair
                 </Dropdown.Item>
