@@ -19,7 +19,6 @@ export function ProductDetail() {
     setLoading(true);
     GetProduct(id).then(
       (resp) => {
-        console.log(resp.data)
         setProduct({
           ...resp.data,
           price: resp.data.price.toLocaleString("pt-BR", {

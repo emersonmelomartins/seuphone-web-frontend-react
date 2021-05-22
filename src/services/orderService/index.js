@@ -8,3 +8,7 @@ export async function GetOrder(id) {
 export async function GetAllOrderByUser(id) {
   return await api.get(`/${route}/user/${id}`);
 }
+
+export async function CreateOrder(form) {
+  return await api.post(`/${route}`, form);
+}
