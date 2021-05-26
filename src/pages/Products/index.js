@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import { toast } from 'react-toastify';
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 import { ProductCard } from "../../components/ProductCard";
 
@@ -17,23 +17,33 @@ export function Products() {
   const location = useLocation();
 
   useEffect(() => {
-    setLoading(true);
-
-    const productName = new URLSearchParams(location.search).get("productName") ?? "";
+    const productName =
+      new URLSearchParams(location.search).get("productName") ?? "";
 
     const obj = {
-      productName
-    }
-    GetAllProduct(obj).then(resp => {
-      setProducts(resp.data);
-      setLoading(false);
-    },
-    (error) => {
+      productName,
+    };
+
+    _getAllProduct(obj);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setLoading, location]);
+
+  const _getAllProduct = (obj) => {
+    setLoading(true);
+    GetAllProduct(obj).then(
+      (resp) => {
+        if(resp.data.length < 1) {
+          toast.warning("Não foi encontrado resultado.");
+        }
+        setProducts(resp.data);
+        setLoading(false);
+      },
+      (error) => {
         setLoading(false);
         try {
           const erro = error.response.data;
           if (erro !== undefined) {
-            if(typeof erro.errors === 'object') {
+            if (typeof erro.errors === "object") {
               Object.values(erro.errors).forEach((e) => {
                 toast.error(e[0]);
               });
@@ -43,16 +53,17 @@ export function Products() {
           } else {
             toast.error("Não foi possível carregar os dados.");
           }
-
         } catch (e) {
           toast.error("Ocorreu um erro interno.");
         }
-    });
-  }, [setLoading, location]);
+      }
+    );
+  };
 
   return (
     <ProductsContainer>
       <h4 className="mt-5">Filtro de Busca</h4>
+      <button onClick={() => _getAllProduct({productName: null})}>Limpar Filtro</button>
       <div className="row">
         <div className="col-3">
           <div className="accordion" id="accordionExample">
@@ -80,17 +91,21 @@ export function Products() {
               >
                 <div className="card-body p-0">
                   <ul className="list-group">
-                    <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <li
+                      className="list-group-item d-flex justify-content-between align-items-center"
+                      onClick={() => _getAllProduct({ productName: "32gb" })} style={{cursor: 'pointer'}}
+                    >
                       32GB
-                      <span className="badge badge-primary badge-pill">1</span>
                     </li>
-                    <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <li
+                      className="list-group-item d-flex justify-content-between align-items-center"
+                      onClick={() => _getAllProduct({ productName: "64gb" })} style={{cursor: 'pointer'}}
+                    >
                       64GB
-                      <span className="badge badge-primary badge-pill">1</span>
                     </li>
-                    <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <li className="list-group-item d-flex justify-content-between align-items-center"
+                    onClick={() => _getAllProduct({ productName: "128gb" })} style={{cursor: 'pointer'}}>
                       128GB
-                      <span className="badge badge-primary badge-pill">1</span>
                     </li>
                   </ul>
                 </div>
@@ -119,17 +134,17 @@ export function Products() {
               >
                 <div className="card-body p-0">
                   <ul className="list-group">
-                    <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <li className="list-group-item d-flex justify-content-between align-items-center"
+                    onClick={() => _getAllProduct({ productName: "dourado" })} style={{cursor: 'pointer'}}>
                       Dourado
-                      <span className="badge badge-primary badge-pill">1</span>
                     </li>
-                    <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <li className="list-group-item d-flex justify-content-between align-items-center"
+                    onClick={() => _getAllProduct({ productName: "verde" })} style={{cursor: 'pointer'}}>
                       Verde
-                      <span className="badge badge-primary badge-pill">1</span>
                     </li>
-                    <li className="list-group-item d-flex justify-content-between align-items-center">
-                      Space Gray
-                      <span className="badge badge-primary badge-pill">1</span>
+                    <li className="list-group-item d-flex justify-content-between align-items-center"
+                    onClick={() => _getAllProduct({ productName: "cinza" })} style={{cursor: 'pointer'}}>
+                      Cinza
                     </li>
                   </ul>
                 </div>
@@ -158,17 +173,17 @@ export function Products() {
               >
                 <div className="card-body p-0">
                   <ul className="list-group">
-                    <li className="list-group-item d-flex justify-content-between align-items-center">
-                      iPhone 7
-                      <span className="badge badge-primary badge-pill">1</span>
+                    <li className="list-group-item d-flex justify-content-between align-items-center"
+                    onClick={() => _getAllProduct({ productName: "iphone X" })} style={{cursor: 'pointer'}}>
+                      iPhone X
                     </li>
-                    <li className="list-group-item d-flex justify-content-between align-items-center">
-                      iPhone XR
-                      <span className="badge badge-primary badge-pill">1</span>
+                    <li className="list-group-item d-flex justify-content-between align-items-center"
+                    onClick={() => _getAllProduct({ productName: "iphone 11" })} style={{cursor: 'pointer'}}>
+                      iPhone 11
                     </li>
-                    <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <li className="list-group-item d-flex justify-content-between align-items-center"
+                    onClick={() => _getAllProduct({ productName: "iphone 12" })} style={{cursor: 'pointer'}}>
                       iPhone 12
-                      <span className="badge badge-primary badge-pill">1</span>
                     </li>
                   </ul>
                 </div>
@@ -179,11 +194,9 @@ export function Products() {
 
         <div className="col-9">
           <div className="d-flex flex-wrap">
-            
-            {products.map(product => (
+            {products.map((product) => (
               <ProductCard key={product.id} product={product} productQtd={1} />
             ))}
-            
           </div>
         </div>
       </div>
