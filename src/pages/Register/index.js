@@ -7,6 +7,7 @@ import { RegisterContainer } from "./styles";
 import { useLoading } from "../../hooks/useLoading";
 import { CreateUser } from "../../services/userService";
 import { cpfMask } from "../../util/cpfMask";
+import { zipCodeMask } from "../../util/zipCodeMask";
 
 export function Register() {
   const { register, setValue, getValues, handleSubmit, watch } = useForm();
@@ -17,6 +18,7 @@ export function Register() {
 
   const [validationState, setValidationState] = useState([]);
   const [cpfWithMask, setCpfWithMask] = useState("");
+  const [zipCodeWithMask, setZipCodeWithMask] = useState("");
 
   async function viacepSearch(event) {
     const valor = event.target.value;
@@ -72,11 +74,11 @@ export function Register() {
       toast.error("Você precisa informar o nome.");
     }
 
-    // if (form.cpf === undefined || form.cpf === null || form.cpf === "") {
-    //   hasError = true;
-    //   validationState.cpf = "error";
-    //   toast.error("Você precisa informar o cpf.");
-    // }
+    if (cpfWithMask === undefined || cpfWithMask === null || cpfWithMask === "") {
+      hasError = true;
+      validationState.cpf = "error";
+      toast.error("Você precisa informar o cpf.");
+    }
 
     if (
       form.birthdate === undefined ||
@@ -89,9 +91,9 @@ export function Register() {
     }
 
     if (
-      form.zipcode === undefined ||
-      form.zipcode === null ||
-      form.zipcode === ""
+      zipCodeWithMask === undefined ||
+      zipCodeWithMask === null ||
+      zipCodeWithMask === ""
     ) {
       hasError = true;
       validationState.zipcode = "error";
@@ -130,6 +132,12 @@ export function Register() {
       toast.error("Você precisa informar o estado.");
     }
 
+        if (form.houseNumber === undefined || form.houseNumber === null || form.houseNumber === "") {
+      hasError = true;
+      validationState.houseNumber = "error";
+      toast.error("Você precisa informar o número.");
+    }
+
     var mailPattern = new RegExp(
       /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
     );
@@ -145,8 +153,14 @@ export function Register() {
   };
 
   const createNewUser = (form) => {
+    const obj = {
+      ...form,
+      cpf: cpfWithMask,
+      zipCode: zipCodeWithMask
+    }
+
     setLoading(true);
-    CreateUser(form).then(
+    CreateUser(obj).then(
       (resp) => {
         setLoading(false);
         toast.success("Usuário criado com sucesso!");
@@ -177,6 +191,12 @@ export function Register() {
   const onChangeCpf = (event) => {
     setCpfWithMask(cpfMask(event.target.value));
   };
+
+  
+  const onChangeZipCode = (event) => {
+    setZipCodeWithMask(zipCodeMask(event.target.value));
+  };
+  
 
   function onSubmit(form) {
     if (!validationBeforeCreate()) {
@@ -296,7 +316,7 @@ export function Register() {
             <div className="form-group col-md-4">
               <label htmlFor="cpf">CPF</label>
               <input
-                {...register("cpf")}
+                // {...register("cpf")}
                 type="text"
                 className="form-control"
                 id="cpf"
@@ -337,18 +357,18 @@ export function Register() {
           <h4>Endereço</h4>
           <div className="form-row">
             <div className="form-group col-md-4">
-              <label htmlFor="zipcode">CEP</label>
+              <label htmlFor="zipCode">CEP</label>
               <input
-                {...register("zipcode")}
+                // {...register("zipCode")}
                 type="text"
                 className="form-control"
-                id="zipcode"
-                name="zipcode"
-                size="10"
+                id="zipCode"
+                name="zipCode"
                 maxLength="9"
-                defaultValue=""
                 placeholder="Ex: 09112-000"
                 onBlur={viacepSearch}
+                value={zipCodeWithMask}
+                onChange={onChangeZipCode}
                 style={
                   validationState.zipcode !== undefined
                     ? { border: "1px solid red" }
@@ -359,7 +379,7 @@ export function Register() {
           </div>
 
           <div className="form-row">
-            <div className="form-group col-md-8">
+            <div className="form-group col-md-6">
               <label htmlFor="address">Logradouro</label>
               <input
                 {...register("address")}
@@ -370,6 +390,23 @@ export function Register() {
                 placeholder="Ex: Rua Machado de Assis"
                 style={
                   validationState.address !== undefined
+                    ? { border: "1px solid red" }
+                    : {}
+                }
+              />
+            </div>
+
+                        <div className="form-group col-md-2">
+              <label htmlFor="houseNumber">Número</label>
+              <input
+                {...register("houseNumber")}
+                type="text"
+                className="form-control"
+                id="houseNumber"
+                name="houseNumber"
+                placeholder="Ex: 123"
+                style={
+                  validationState.houseNumber !== undefined
                     ? { border: "1px solid red" }
                     : {}
                 }

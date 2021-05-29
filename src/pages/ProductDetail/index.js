@@ -64,7 +64,7 @@ export function ProductDetail() {
                 <div>
                   <img src={product.image} width="80%" alt="" />
                 </div>
-                <div class="pro-img-list">
+                <div className="pro-img-list">
                   <a href="/">
                     <img src={product.image} width="20%" alt="" />
                   </a>

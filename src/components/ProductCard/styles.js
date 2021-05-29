@@ -2,6 +2,20 @@ import styled from 'styled-components';
 
 export const ProductCardContainer = styled.div`
 
+
+  width: 14.2rem;
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.25);
+  margin-right: 15px;
+  border-radius: 10px;
+
+
+ img {
+  width: 150px;
+  display: block;
+  text-align: center;
+  margin: 10px auto 0;
+}
+
   .panel-body a {
     text-align: left; 
     color: #222

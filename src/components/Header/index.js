@@ -124,6 +124,11 @@ export function Header() {
                   Produtos
                 </Nav.Link>
               </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="3" as={Link} to="/about">
+                  Sobre
+                </Nav.Link>
+              </Nav.Item>
             </Nav>
           </Navbar.Collapse>
         </div>

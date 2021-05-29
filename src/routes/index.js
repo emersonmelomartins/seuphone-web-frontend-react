@@ -11,12 +11,15 @@ import { Register } from '../pages/Register';
 import { ContractTerms } from '../pages/ContractTerms';
 import { UserOrderDetail } from '../pages/UserOrderDetail';
 import { CartPayment } from '../pages/CartPayment';
+import { About } from '../pages/About';
 
 export function Routes() {
 
   return (
     <Switch>
       <Route path="/" exact component={Home} />
+
+      <Route path="/about" exact component={About} />
 
       <Route path="/login" exact component={Login} />
 
