@@ -249,7 +249,7 @@ export function CartPayment() {
                       <p style={{ lineHeight: "10px" }}>
                         Estado: {userInfo.state}
                       </p>
-                      <a href="/" className="card-link">
+                      <a href="/profile?tab=address" className="card-link">
                         Atualizar endereço
                       </a>
                     </div>

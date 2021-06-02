@@ -201,7 +201,7 @@ export function Home() {
                   determinado tempo já estabelecido por nós, no caso dois anos.
                 </p>
                 <p className="pt-3">
-                  Quer saber mais? <a href="/">clique aqui</a>.
+                  Quer saber mais? <a href="/about">clique aqui</a>.
                 </p>
               </div>
             </div>

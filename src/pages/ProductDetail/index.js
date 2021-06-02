@@ -65,15 +65,15 @@ export function ProductDetail() {
                   <img src={product.image} width="80%" alt="" />
                 </div>
                 <div className="pro-img-list">
-                  <a href="/">
+                  <span>
                     <img src={product.image} width="20%" alt="" />
-                  </a>
-                  <a href="/">
+                  </span>
+                  <span>
                     <img src={product.image} width="20%" alt="" />
-                  </a>
-                  <a href="/">
+                  </span>
+                  <span>
                     <img src={product.image} width="20%" alt="" />
-                  </a>
+                  </span>
                 </div>
               </div>
               <div className="col-md-6 text-left">
@@ -84,6 +84,8 @@ export function ProductDetail() {
                 <p style={{color: "gray", fontSize: '12px', lineHeight: '10px'}}>Modelo: {product.model}</p>
                 <p style={{color: "gray", fontSize: '12px', lineHeight: '10px'}}>Cor: {product.color}</p>
                 <p style={{color: "gray", fontSize: '12px', lineHeight: '10px'}}>Armazenamento: {product.storage}</p>
+                <br/>
+                <p style={{color: "gray", fontSize: '12px', lineHeight: '10px'}}>Quantidade Estoque: {product.stockQuantity}</p>
 
                 <label style={{ color: "gray", lineHeight: '5px' }}>Preço:</label>
                 <p style={{ fontSize: "28px" }}>
