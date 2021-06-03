@@ -12,6 +12,7 @@ import { ContractTerms } from '../pages/ContractTerms';
 import { UserOrderDetail } from '../pages/UserOrderDetail';
 import { CartPayment } from '../pages/CartPayment';
 import { About } from '../pages/About';
+import { ForgotPassword } from '../pages/ForgotPassword';
 
 export function Routes() {
 
@@ -22,6 +23,8 @@ export function Routes() {
       <Route path="/about" exact component={About} />
 
       <Route path="/login" exact component={Login} />
+
+      <Route path="/forgot-password" exact component={ForgotPassword} />
 
       <Route path="/register" exact component={Register} />
 

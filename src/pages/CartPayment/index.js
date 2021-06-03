@@ -466,9 +466,13 @@ export function CartPayment() {
                         </p>
                         <p style={{ color: "#999", fontWeight: "bold" }}>
                           Tipo de Pagamento -{" "}
-                          {paymentMethod === 0
+                          {
+                          paymentMethod === "1"
                             ? "Cartão de Crédito"
-                            : paymentMethod === 1 && "Carnê"}
+                            : paymentMethod === "2" 
+                            ? "Carnê" 
+                            : "N/A"
+                            }
                         </p>
                         <p style={{ color: "#999", fontWeight: "bold" }}>
                           Qtd. Parcelas -{" "}

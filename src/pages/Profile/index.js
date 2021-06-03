@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { AddressTab } from "./AddressTab";
 import { useLoading } from "../../hooks/useLoading";
 import { useLocation } from "react-router";
+import { PasswordTab } from "./PasswordTab";
 
 export function Profile() {
   const { user } = useAuth();
@@ -81,6 +82,9 @@ new URLSearchParams(location.search).get("tab") ?? "";
                   <Nav.Item>
                     <Nav.Link eventKey="address">Endereço</Nav.Link>
                   </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="password">Senha</Nav.Link>
+                  </Nav.Item>
                 </Nav>
               </div>
               <div className="col-sm-10">
@@ -93,6 +97,9 @@ new URLSearchParams(location.search).get("tab") ?? "";
                   </Tab.Pane>
                   <Tab.Pane eventKey="address">
                     <AddressTab userInfo={userInfo} />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="password">
+                    <PasswordTab userInfo={userInfo} />
                   </Tab.Pane>
                 </Tab.Content>
               </div>
