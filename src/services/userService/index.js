@@ -10,8 +10,20 @@ export async function GetUser(id) {
   return await api.get(`/${route}/${id}`);
 }
 
+export async function GetAllUsers() {
+  return await api.get(`/${route}`);
+}
+
 export async function CreateUser(form) {
   return await api.post(`/${route}`, form);
+}
+
+// export async function CreateUser(form) {
+//   return await api.post(`/${route}`, form);
+// }
+
+export async function CreateUserAdmin(form) {
+  return await api.post(`/${route}/admin`, form);
 }
 
 export async function UpdateUserAddress(form) {

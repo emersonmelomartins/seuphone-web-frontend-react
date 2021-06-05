@@ -23,7 +23,6 @@ useEffect(() => {
       limit: 4
     }
     GetAllProduct(obj).then(resp => {
-      console.log(resp.data);
       setProducts(resp.data);
       setLoading(false);
     },

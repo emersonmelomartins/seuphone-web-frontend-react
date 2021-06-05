@@ -72,11 +72,11 @@ export function Register() {
       toast.error("Você precisa informar o nome.");
     }
 
-    // if (form.cpf === undefined || form.cpf === null || form.cpf === "") {
-    //   hasError = true;
-    //   validationState.cpf = "error";
-    //   toast.error("Você precisa informar o cpf.");
-    // }
+    if (form.cpf === undefined || form.cpf === null || form.cpf === "") {
+      hasError = true;
+      validationState.cpf = "error";
+      toast.error("Você precisa informar o cpf.");
+    }
 
     if (
       form.birthdate === undefined ||
@@ -129,6 +129,13 @@ export function Register() {
       validationState.state = "error";
       toast.error("Você precisa informar o estado.");
     }
+
+    if (form.houseNumber === undefined || form.houseNumber === null || form.houseNumber === "") {
+      hasError = true;
+      validationState.houseNumber = "error";
+      toast.error("Você precisa informar o número da residência.");
+    }
+    
 
     var mailPattern = new RegExp(
       /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
@@ -396,16 +403,16 @@ export function Register() {
             </div>
 
             <div className="form-group col-md-4">
-              <label htmlFor="city">Cidade</label>
+              <label htmlFor="houseNumber">Número</label>
               <input
-                {...register("city")}
-                type="text"
+                {...register("houseNumber")}
+                type="number"
                 className="form-control"
-                id="city"
-                name="city"
-                placeholder="Ex: Mauá"
+                id="houseNumber"
+                name="houseNumber"
+                placeholder="Ex: 123"
                 style={
-                  validationState.city !== undefined
+                  validationState.houseNumber !== undefined
                     ? { border: "1px solid red" }
                     : {}
                 }
@@ -456,6 +463,23 @@ export function Register() {
                 <option value="SE">Sergipe</option>
                 <option value="TO">Tocantins</option>
               </select>
+            </div>
+
+            <div className="form-group col-md-4">
+              <label htmlFor="city">Cidade</label>
+              <input
+                {...register("city")}
+                type="text"
+                className="form-control"
+                id="city"
+                name="city"
+                placeholder="Ex: Mauá"
+                style={
+                  validationState.city !== undefined
+                    ? { border: "1px solid red" }
+                    : {}
+                }
+              />
             </div>
           </div>
 

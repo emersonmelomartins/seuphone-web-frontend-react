@@ -11,6 +11,7 @@ import { Register } from '../pages/Register';
 import { ContractTerms } from '../pages/ContractTerms';
 import { UserOrderDetail } from '../pages/UserOrderDetail';
 import { CartPayment } from '../pages/CartPayment';
+import { Panel } from '../pages/panel';
 
 export function Routes() {
 
@@ -29,6 +30,8 @@ export function Routes() {
       <Route path="/cart" exact component={Cart} />
 
       <PrivateRoute path="/profile" exact component={Profile} />
+
+      <PrivateRoute path="/panel" exact component={Panel} />
 
       <PrivateRoute path="/user-order-detail/:id" exact component={UserOrderDetail} />
 

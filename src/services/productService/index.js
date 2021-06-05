@@ -3,7 +3,6 @@ const route = "products";
 
 
 export async function GetAllProduct(obj) {
-  console.log(obj);
   return await api.get(`/${route}?productName=${obj.productName ?? ""}&limit=${obj.limit ?? 0}`);
 }
 
