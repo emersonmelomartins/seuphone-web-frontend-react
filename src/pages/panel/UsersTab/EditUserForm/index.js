@@ -1,24 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useLoading } from "../../../../hooks/useLoading";
 import { GetAllRoles } from "../../../../services/roleService";
-import { CreateUserAdmin } from "../../../../services/userService";
+import { GetUser, UpdateUserAdm } from "../../../../services/userService";
 import { cpfMask } from "../../../../util/cpfMask";
-import { ModalCreate } from "../../styles";
+import { ProfileContainer } from "../../styles";
 
-export function EditUserForm(props) {
+export function EditUserForm() {
   const { register, setValue, getValues, handleSubmit, watch } = useForm();
   const { setLoading } = useLoading();
+  const history = useHistory();
   const [validationState, setValidationState] = useState([]);
   const [cpfWithMask, setCpfWithMask] = useState("");
   const [roles, setRoles] = useState([]);
+  const [user, setUser] = useState([]);
+  const [parameters, setParameters] = useState([]);
+
+  const params = useParams();
+
+  const idUser = params.id;
 
   useEffect(() => {
-    _getAllRoles()
+    _getAllRoles();
+    _getUser(idUser);
   }, []);
 
   const _getAllRoles = () => {
@@ -26,6 +34,52 @@ export function EditUserForm(props) {
     GetAllRoles().then(
       (resp) => {
         setRoles(resp.data);
+        setLoading(false);
+      },
+      (error) => {
+        setLoading(false);
+        try {
+          const erro = error.response.data;
+          if (erro !== undefined) {
+            if (typeof erro.errors === 'object') {
+              Object.values(erro.errors).forEach((e) => {
+                toast.error(e[0]);
+              });
+            } else {
+              toast.error(erro);
+            }
+          } else {
+            toast.error("Não foi possível carregar os dados.");
+          }
+
+        } catch (e) {
+          toast.error("Ocorreu um erro interno.");
+        }
+      }
+    );
+  };
+
+
+  const _getUser = (idUser) => {
+    setLoading(true);
+    GetUser(idUser).then(
+      (resp) => {
+        let data = resp.data
+        setUser(data);
+        console.log(data)
+        setValue("email", data.email);
+        setValue("name", data.name);
+        setValue("genre", data.genre);
+        setValue("cpf", data.cpf);
+        setValue("birthDate", data.birthDate);
+        setValue("zipCode", data.zipCode);
+        setValue("address", data.address);
+        setValue("district", data.district);
+        setValue("city", data.city);
+        setValue("houseNumber", data.houseNumber);
+        setValue("state", data.state);
+        setValue("userRoles", data.userRoles);
+
         setLoading(false);
       },
       (error) => {
@@ -78,7 +132,7 @@ export function EditUserForm(props) {
     }
   }
 
-  const validationBeforeCreate = () => {
+  const validationBeforeUpdate = () => {
     let form = watch();
     let hasError = false;
     let validationState = {};
@@ -192,71 +246,62 @@ export function EditUserForm(props) {
     return hasError;
   };
 
-  // const createNewUser = (form) => {
-  //   setLoading(true);
+  const editUser = (form) => {
+    setLoading(true);
 
-  //   let data = {
-  //     ...form,
-  //     userRoles: [
-  //       {
-  //         roleId: form.role
-  //       }
-  //     ]
-  //   }
-  //   CreateUserAdmin(data).then(
-  //     (resp) => {
-  //       setLoading(false);
-  //       toast.success("Usuário criado com sucesso!");
-  //     },
-  //     (error) => {
-  //       setLoading(false);
-  //       try {
-  //         const erro = error.response.data;
-  //         if (erro !== undefined) {
-  //           if (typeof erro.errors === "object") {
-  //             Object.values(erro.errors).forEach((e) => {
-  //               toast.error(e[0]);
-  //             });
-  //           } else {
-  //             toast.error(erro);
-  //           }
-  //         } else {
-  //           toast.error("Não foi possível carregar os dados.");
-  //         }
-  //       } catch (e) {
-  //         toast.error("Ocorreu um erro interno.");
-  //       }
-  //     }
-  //   );
-  // };
+    let data = {
+      ...form,
+      userRoles: [
+        {
+          roleId: form.role
+        }
+      ]
+    }
+    UpdateUserAdm(data).then(
+      (resp) => {
+        setLoading(false);
+        toast.success("Usuário editado com sucesso!");
+        history.push('/panel')
+      },
+      (error) => {
+        setLoading(false);
+        try {
+          const erro = error.response.data;
+          if (erro !== undefined) {
+            if (typeof erro.errors === "object") {
+              Object.values(erro.errors).forEach((e) => {
+                toast.error(e[0]);
+              });
+            } else {
+              toast.error(erro);
+            }
+          } else {
+            toast.error("Não foi possível carregar os dados.");
+          }
+        } catch (e) {
+          toast.error("Ocorreu um erro interno.");
+        }
+      }
+    );
+  };
 
   const onChangeCpf = (event) => {
     setCpfWithMask(cpfMask(event.target.value));
   };
 
   function onSubmit(form) {
-    if (!validationBeforeCreate()) {
-      createNewUser(form);
+    if (!validationBeforeUpdate()) {
+      editUser(form);
     }
   }
 
   return (
-    <ModalCreate>
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Cadastro de Usuário
-        </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+    <ProfileContainer>
+      <div className="empty-container seuphone-background"></div>
+      <div className="container py-5">
+        <div className="bg-light p-5 mx-auto styled-form">
 
+          <h1 className="py-2 text-uppercase">Editar Usuário</h1>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="p-5 mx-auto"
@@ -568,20 +613,21 @@ export function EditUserForm(props) {
               type="submit"
               className="btn btn-outline-success btn-rounded-seuphone"
             >
-              <i className="far fa-circle"></i> Cadastrar
+              <i className="far fa-circle"></i> Salvar
           </button>
+
+            <Link to="/panel">
+              <button
+                className="btn btn-outline-danger btn-rounded-seuphone"
+              >
+                <i className="far fa-circle"></i> Voltar
+          </button>
+            </Link>
           </form>
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            type="submit"
-            className="btn btn-outline-danger btn-rounded-seuphone"
-            onClick={props.onHide}
-          >
-            <i className="far fa-circle"></i> Fechar
-          </button>
-        </Modal.Footer>
-      </Modal>
-    </ModalCreate>
+
+        </div>
+      </div>
+    </ProfileContainer>
+
   );
 }

@@ -2,15 +2,14 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { MdModeEdit, MdDeleteForever, MdAddCircle } from "react-icons/md";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useLoading } from "../../../hooks/useLoading";
 import { GetAllUsers } from "../../../services/userService";
 import { ButtonCreate, Users } from "../styles";
-import { CreateUserForm } from "./CreateUserForm";
 
 export function UsersTab() {
   const [users, setUsers] = useState([]);
-  const [modalShow, setModalShow] = useState(false);
   const { setLoading } = useLoading();
 
   useEffect(() => {
@@ -35,12 +34,12 @@ export function UsersTab() {
         setUsers(updatedData);
         setLoading(false);
       },
-      (error) => { 
+      (error) => {
         setLoading(false);
         try {
           const erro = error.response.data;
           if (erro !== undefined) {
-            if(typeof erro.errors === 'object') {
+            if (typeof erro.errors === 'object') {
               Object.values(erro.errors).forEach((e) => {
                 toast.error(e[0]);
               });
@@ -90,13 +89,11 @@ export function UsersTab() {
     <>
       <ButtonCreate>
         <div className="div-button">
-          <Button className="button-create" variant="outline-dark" onClick={() => setModalShow(true)}>
-            <MdAddCircle className="icon-button" size={20} /> Criar Usuário
+          <Link to="/create-user-admin">
+            <Button className="button-create" variant="outline-dark" to="/create-user-admin">
+              <MdAddCircle className="icon-button" size={20} /> Criar Usuário
       </Button>
-          <CreateUserForm
-            show={modalShow}
-            onHide={() => setModalShow(false)}
-          />
+          </Link>
         </div>
       </ ButtonCreate>
       {users.length >= 1 ? (
@@ -114,7 +111,7 @@ export function UsersTab() {
           </thead>
           <tbody>
             {users.map((data, index) => (
-              <tr key={index}> 
+              <tr key={index}>
                 <td>{data.id}</td>
                 <td>
                   <span>{data.name}</span>
@@ -126,9 +123,11 @@ export function UsersTab() {
                 </td>
                 <td>{data.hasAdmin === true ? "Admin" : "Cliente"}</td>
                 <td>
-                  <button type="button">
-                    <MdModeEdit size={20} />
-                  </button>
+                  <Link to={"/update-user/" + data.id }>
+                    <button>
+                      <MdModeEdit size={20} />
+                    </button>
+                  </Link>
                 </td>
                 <td>
                   <button type="button">

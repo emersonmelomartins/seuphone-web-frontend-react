@@ -18,14 +18,14 @@ export async function CreateUser(form) {
   return await api.post(`/${route}`, form);
 }
 
-// export async function CreateUser(form) {
-//   return await api.post(`/${route}`, form);
-// }
-
 export async function CreateUserAdmin(form) {
   return await api.post(`/${route}/admin`, form);
 }
 
 export async function UpdateUserAddress(form) {
   return await api.put(`/${route}/${form.id}`, form);
+}
+
+export async function UpdateUserAdm(form) {
+  return await api.put(`/${route}/admin/${form.id}`, form);
 }

@@ -12,6 +12,8 @@ import { ContractTerms } from '../pages/ContractTerms';
 import { UserOrderDetail } from '../pages/UserOrderDetail';
 import { CartPayment } from '../pages/CartPayment';
 import { Panel } from '../pages/panel';
+import { CreateUserForm } from '../pages/panel/UsersTab/CreateUserForm';
+import { EditUserForm } from '../pages/panel/UsersTab/EditUserForm';
 
 export function Routes() {
 
@@ -38,6 +40,10 @@ export function Routes() {
       <PrivateRoute path="/contract" exact component={ContractTerms} />
 
       <PrivateRoute path="/cart-payment" exact component={CartPayment} />
+
+      <PrivateRoute path="/create-user-admin" exact component={CreateUserForm} />
+
+      <PrivateRoute path="/update-user/:id" exact component={EditUserForm} />
 
     </Switch>
   );

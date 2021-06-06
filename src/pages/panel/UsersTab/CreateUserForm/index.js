@@ -1,19 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router";
+import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useLoading } from "../../../../hooks/useLoading";
 import { GetAllRoles } from "../../../../services/roleService";
 import { CreateUserAdmin } from "../../../../services/userService";
 import { cpfMask } from "../../../../util/cpfMask";
-import { ModalCreate } from "../../styles";
+import {ProfileContainer } from "../../styles";
 
-export function CreateUserForm(props) {
+export function CreateUserForm() {
   const { register, setValue, getValues, handleSubmit, watch } = useForm();
   const { setLoading } = useLoading();
+  const history = useHistory();
   const [validationState, setValidationState] = useState([]);
   const [cpfWithMask, setCpfWithMask] = useState("");
   const [roles, setRoles] = useState([]);
@@ -197,7 +197,7 @@ export function CreateUserForm(props) {
     setLoading(true);
 
     let data = {
-     ...form,
+      ...form,
       userRoles: [
         {
           roleId: form.role
@@ -208,6 +208,7 @@ export function CreateUserForm(props) {
       (resp) => {
         setLoading(false);
         toast.success("Usuário criado com sucesso!");
+        history.push('/panel')
       },
       (error) => {
         setLoading(false);
@@ -242,22 +243,12 @@ export function CreateUserForm(props) {
   }
 
   return (
-    <ModalCreate>
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Cadastro de Usuário
-        </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+    <ProfileContainer>
+      <div className="empty-container seuphone-background"></div>
+      <div className="container py-5">
+        <div className="bg-light p-5 mx-auto styled-form">
 
+          <h1 className="py-2 text-uppercase">Cadastro Usuário</h1>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="p-5 mx-auto"
@@ -571,18 +562,19 @@ export function CreateUserForm(props) {
             >
               <i className="far fa-circle"></i> Cadastrar
           </button>
-          </form>
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            type="submit"
-            className="btn btn-outline-danger btn-rounded-seuphone"
-            onClick={props.onHide}
-          >
-            <i className="far fa-circle"></i> Fechar
+
+          <Link to="/panel">
+            <button
+              className="btn btn-outline-danger btn-rounded-seuphone"
+            >
+              <i className="far fa-circle"></i> Voltar
           </button>
-        </Modal.Footer>
-      </Modal>
-    </ModalCreate>
+              </Link>
+          </form>
+
+        </div>
+      </div>
+    </ProfileContainer>
+
   );
 }
