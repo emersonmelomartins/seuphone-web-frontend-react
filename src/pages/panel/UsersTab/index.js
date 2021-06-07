@@ -5,8 +5,9 @@ import { MdModeEdit, MdDeleteForever, MdAddCircle } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useLoading } from "../../../hooks/useLoading";
-import { GetAllUsers } from "../../../services/userService";
+import { DeleteUser, GetAllUsers } from "../../../services/userService";
 import { ButtonCreate, Users } from "../styles";
+import confirmService from "../../../components/confirmDialog";
 
 export function UsersTab() {
   const [users, setUsers] = useState([]);
@@ -57,33 +58,25 @@ export function UsersTab() {
     );
   };
 
-  // const showDeleteDialog = async (idUser) => {
-  //   let props = {
-  //     title: "Confirmação",
-  //     message: "Deseja realmente excluir este registro?",
-  //   };
+  const showDeleteDialog = async (id) => {
+    let props = {}
 
-  //   const result = await confirmService.show(props);
-  //   if (result) {
-  //     DeleteInstallationAreaWorkCenter(idUser).then(
-  //       (data) => {
-  //         toast.success("Usuário deletado com sucesso!");
-
-  //         let tbl = users.filter(
-  //           (c) =>
-  //             !(
-  //               c.idUser === idUser
-  //             )
-  //         );
-
-  //         setUsers(tbl);
-  //       },
-  //       (error) => {
-  //         toast.error("Não foi possível deletar os dados.");
-  //       }
-  //     );
-  //   }
-  // };
+    const result = await confirmService.show(props);
+    if (result) {
+      DeleteUser(id).then(
+        (data) => {
+          toast.success("Usuário deletado com sucesso!");
+          let tbl = users.filter(
+            (c) =>!(c.id === id)
+          );
+          setUsers(tbl);
+        },
+        (error) => {
+          toast.error("Não foi possível deletar os dados.");
+        }
+      );
+    }
+  };
 
   return (
     <>
@@ -123,14 +116,16 @@ export function UsersTab() {
                 </td>
                 <td>{data.hasAdmin === true ? "Admin" : "Cliente"}</td>
                 <td>
-                  <Link to={"/update-user/" + data.id }>
+                  <Link to={"/update-user/" + data.id}>
                     <button>
                       <MdModeEdit size={20} />
                     </button>
                   </Link>
                 </td>
                 <td>
-                  <button type="button">
+                  <button type="button" onClick={() =>
+                    showDeleteDialog(data.id)
+                  }>
                     <MdDeleteForever size={20} />
                   </button>
                 </td>

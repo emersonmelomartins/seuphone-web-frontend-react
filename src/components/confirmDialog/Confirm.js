@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { render } from 'react-dom';
 
 let resolve;

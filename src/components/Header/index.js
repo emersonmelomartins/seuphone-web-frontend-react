@@ -49,7 +49,9 @@ export function Header() {
       >
         <div className="container">
           <Navbar.Brand>
+            <Link eventKey="1" as={Link} to="/">
             <img src={logoImg} width="90px" alt="" />
+            </Link>
             <Navbar.Toggle />
           </Navbar.Brand>
 

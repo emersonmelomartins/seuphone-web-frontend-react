@@ -26,6 +26,10 @@ export async function UpdateUserAddress(form) {
   return await api.put(`/${route}/${form.id}`, form);
 }
 
-export async function UpdateUserAdm(form) {
-  return await api.put(`/${route}/admin/${form.id}`, form);
+export async function DeleteUser(id) {
+  return await api.delete(`/${route}/${id}`);
+}
+
+export async function UpdateUserAdm(form, idUser) {
+  return await api.put(`/${route}/admin/${idUser}`, form);
 }

@@ -11,17 +11,14 @@ import { cpfMask } from "../../../../util/cpfMask";
 import { ProfileContainer } from "../../styles";
 
 export function EditUserForm() {
-  const { register, setValue, getValues, handleSubmit, watch } = useForm();
+  const { register, setValue, handleSubmit, watch } = useForm();
   const { setLoading } = useLoading();
   const history = useHistory();
   const [validationState, setValidationState] = useState([]);
   const [cpfWithMask, setCpfWithMask] = useState("");
   const [roles, setRoles] = useState([]);
-  const [user, setUser] = useState([]);
-  const [parameters, setParameters] = useState([]);
 
   const params = useParams();
-
   const idUser = params.id;
 
   useEffect(() => {
@@ -65,20 +62,35 @@ export function EditUserForm() {
     GetUser(idUser).then(
       (resp) => {
         let data = resp.data
-        setUser(data);
-        console.log(data)
+        const [day, month, year] = new Date(resp.data.birthDate)
+          .toLocaleDateString()
+          .split("/");
+        const formattedBirthDate = `${year}-${month}-${day}`;
+
+        let role = resp.data.userRoles.map((item) => {
+          return item.role.roleName
+        })
+
+        let roleValue = "";
+
+        if (role[0] === "ROLE_ADMIN") {
+          roleValue = 1
+        }
+        else {
+          roleValue = 2
+        }
         setValue("email", data.email);
         setValue("name", data.name);
         setValue("genre", data.genre);
         setValue("cpf", data.cpf);
-        setValue("birthDate", data.birthDate);
-        setValue("zipCode", data.zipCode);
+        setValue("birthdate", formattedBirthDate);
+        setValue("zipcode", data.zipCode);
         setValue("address", data.address);
         setValue("district", data.district);
         setValue("city", data.city);
         setValue("houseNumber", data.houseNumber);
         setValue("state", data.state);
-        setValue("userRoles", data.userRoles);
+        setValue("role", roleValue);
 
         setLoading(false);
       },
@@ -137,42 +149,12 @@ export function EditUserForm() {
     let hasError = false;
     let validationState = {};
 
-    if (form.email === undefined || form.email === null || form.email === "") {
-      hasError = true;
-      validationState.email = "error";
-      toast.error("Você precisa informar o e-mail.");
-    }
-
-    if (
-      form.password === undefined ||
-      form.password === null ||
-      form.password === ""
-    ) {
-      hasError = true;
-      validationState.password = "error";
-      toast.error("Você precisa informar a senha.");
-    }
-
-    if (form.name === undefined || form.name === null || form.name === "") {
-      hasError = true;
-      validationState.name = "error";
-      toast.error("Você precisa informar o nome.");
-    }
-
-    if (form.cpf === undefined || form.cpf === null || form.cpf === "") {
-      hasError = true;
-      validationState.cpf = "error";
-      toast.error("Você precisa informar o cpf.");
-    }
-
-    if (
-      form.birthdate === undefined ||
-      form.birthdate === null ||
-      form.birthdate === ""
-    ) {
-      hasError = true;
-      validationState.birthdate = "error";
-      toast.error("Você precisa informar a data de nascimento.");
+    if (form.password.length !== 0) {
+      if (form.password.length < 5 || form.password.length > 60) {
+        hasError = true;
+        validationState.password = "error";
+        toast.error("A senha deve conter no mínimo 5 dígitos e no máximo 60 dígitos");
+      }
     }
 
     if (
@@ -205,12 +187,6 @@ export function EditUserForm() {
       toast.error("Você precisa informar o bairro.");
     }
 
-    if (form.city === undefined || form.city === null || form.city === "") {
-      hasError = true;
-      validationState.city = "error";
-      toast.error("Você precisa informar a cidade.");
-    }
-
     if (form.state === undefined || form.state === null || form.state === "") {
       hasError = true;
       validationState.state = "error";
@@ -230,34 +206,28 @@ export function EditUserForm() {
       toast.error("Você precisa informar uma permissão.");
     }
 
-
-
-    var mailPattern = new RegExp(
-      /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
-    );
-
-    if (!mailPattern.test(getValues("email"))) {
-      hasError = true;
-      validationState.email = "error";
-      toast.error("E-mail informado inválido, tente novamente.");
-    }
-
     setValidationState(validationState);
     return hasError;
   };
 
   const editUser = (form) => {
     setLoading(true);
-
     let data = {
-      ...form,
+      password: form.password,
+      confirmPassword: form.confirmPassword,
+      zipCode: form.zipcode,
+      address: form.address,
+      houseNumber: form.houseNumber,
+      district: form.district,
+      city: form.city,
+      state: form.state,
       userRoles: [
         {
           roleId: form.role
         }
       ]
     }
-    UpdateUserAdm(data).then(
+    UpdateUserAdm(data, idUser).then(
       (resp) => {
         setLoading(false);
         toast.success("Usuário editado com sucesso!");
@@ -317,6 +287,7 @@ export function EditUserForm() {
                   className="form-control"
                   id="email"
                   name="email"
+                  disabled
                   placeholder="Ex: seuemail@email.com"
                   style={
                     validationState.email !== undefined
@@ -376,6 +347,7 @@ export function EditUserForm() {
                   className="form-control"
                   id="name"
                   name="name"
+                  disabled
                   placeholder="Ex: João da Silva"
                   style={
                     validationState.name !== undefined
@@ -392,6 +364,7 @@ export function EditUserForm() {
                 <select
                   id="genre"
                   name="genre"
+                  disabled
                   {...register("genre")}
                   className="form-control"
                   defaultValue=""
@@ -415,6 +388,7 @@ export function EditUserForm() {
                   name="cpf"
                   placeholder="Ex: 123.456.789-10"
                   maxLength={14}
+                  disabled
                   onChange={onChangeCpf}
                   value={cpfWithMask}
                   style={
@@ -435,6 +409,7 @@ export function EditUserForm() {
                   className="form-control"
                   id="birthdate"
                   name="birthdate"
+                  disabled
                   defaultValue=""
                   style={
                     validationState.birthdate !== undefined
