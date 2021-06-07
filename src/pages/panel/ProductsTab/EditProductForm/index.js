@@ -60,7 +60,7 @@ export function EditProductForm() {
     GetProduct(idProduct).then(
       (resp) => {
         let data = resp.data
-        console.log(data)
+        
         setValue("productName", data.productName);
         setValue("description", data.description);
         setValue("model", data.model);

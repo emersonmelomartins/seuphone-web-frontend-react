@@ -135,33 +135,33 @@ export function CreateProductForm() {
       image: imageProduct,
       providerId: form.providerId
     }
-    console.log(data)
-    // CreateProduct(data).then(
-    //   (resp) => {
-    //     setLoading(false);
-    //     toast.success("Produto criado com sucesso!");
-    //     history.push('/panel')
-    //   },
-    //   (error) => {
-    //     setLoading(false);
-    //     try {
-    //       const erro = error.response.data;
-    //       if (erro !== undefined) {
-    //         if (typeof erro.errors === "object") {
-    //           Object.values(erro.errors).forEach((e) => {
-    //             toast.error(e[0]);
-    //           });
-    //         } else {
-    //           toast.error(erro);
-    //         }
-    //       } else {
-    //         toast.error("Não foi possível carregar os dados.");
-    //       }
-    //     } catch (e) {
-    //       toast.error("Ocorreu um erro interno.");
-    //     }
-    //   }
-    // );
+
+    CreateProduct(data).then(
+      (resp) => {
+        setLoading(false);
+        toast.success("Produto criado com sucesso!");
+        history.push('/panel')
+      },
+      (error) => {
+        setLoading(false);
+        try {
+          const erro = error.response.data;
+          if (erro !== undefined) {
+            if (typeof erro.errors === "object") {
+              Object.values(erro.errors).forEach((e) => {
+                toast.error(e[0]);
+              });
+            } else {
+              toast.error(erro);
+            }
+          } else {
+            toast.error("Não foi possível carregar os dados.");
+          }
+        } catch (e) {
+          toast.error("Ocorreu um erro interno.");
+        }
+      }
+    );
   };
 
   function onSubmit(form) {
