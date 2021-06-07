@@ -14,6 +14,7 @@ import { CartPayment } from '../pages/CartPayment';
 import { Panel } from '../pages/panel';
 import { CreateUserForm } from '../pages/panel/UsersTab/CreateUserForm';
 import { EditUserForm } from '../pages/panel/UsersTab/EditUserForm';
+import { EditOrderForm } from '../pages/panel/OrdersTab/EditOrderForm';
 
 export function Routes() {
 
@@ -44,6 +45,9 @@ export function Routes() {
       <PrivateRoute path="/create-user-admin" exact component={CreateUserForm} />
 
       <PrivateRoute path="/update-user/:id" exact component={EditUserForm} />
+
+      <PrivateRoute path="/panel/create-order/" exact component={EditOrderForm} />
+      <PrivateRoute path="/panel/update-order/:id" exact component={EditOrderForm} />
 
     </Switch>
   );

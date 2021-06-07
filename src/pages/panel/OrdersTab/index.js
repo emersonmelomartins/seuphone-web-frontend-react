@@ -1,7 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import { MdModeEdit, MdDeleteForever, MdAddCircle, MdVisibility } from "react-icons/md";
+import {
+  MdModeEdit,
+  MdDeleteForever,
+  MdAddCircle,
+  MdVisibility,
+} from "react-icons/md";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useLoading } from "../../../hooks/useLoading";
 import { GetAllOrders } from "../../../services/orderService";
@@ -30,12 +36,12 @@ export function OrdersTab() {
         setOrders(updatedData);
         setLoading(false);
       },
-      (error) => { 
+      (error) => {
         setLoading(false);
         try {
           const erro = error.response.data;
           if (erro !== undefined) {
-            if(typeof erro.errors === 'object') {
+            if (typeof erro.errors === "object") {
               Object.values(erro.errors).forEach((e) => {
                 toast.error(e[0]);
               });
@@ -45,7 +51,6 @@ export function OrdersTab() {
           } else {
             toast.error("Não foi possível carregar os dados.");
           }
-
         } catch (e) {
           toast.error("Ocorreu um erro interno.");
         }
@@ -55,13 +60,16 @@ export function OrdersTab() {
 
   return (
     <>
-      <ButtonCreate>
-        <div className="div-button">
-          <Button className="button-create" variant="outline-dark">
-          <MdAddCircle className="icon-button" size={20} /> Criar Pedido
-      </Button>
-        </div>
-      </ ButtonCreate>
+      <Link to="/panel/create-order">
+        <ButtonCreate>
+          <div className="div-button">
+            <Button className="button-create" variant="outline-dark">
+              <MdAddCircle className="icon-button" size={20} /> Criar Pedido
+            </Button>
+          </div>
+        </ButtonCreate>
+      </Link>
+
       {orders.length >= 1 ? (
         <Orders>
           <thead>
@@ -75,10 +83,8 @@ export function OrdersTab() {
             </tr>
           </thead>
           <tbody>
-            {orders.map((data, index) =>
-            
-            (
-              <tr key={index}> 
+            {orders.map((data, index) => (
+              <tr key={index}>
                 <td>{data.id}</td>
                 <td>
                   <span>{data.orderStatus}</span>
@@ -88,17 +94,19 @@ export function OrdersTab() {
                   <strong>{data.formattedTotal}</strong>
                 </td>
                 <td>
-                  <button type="button">
+                  <button type="button" title="Visualizar Nota Fiscal">
                     <MdVisibility size={20} />
                   </button>
                 </td>
                 <td>
-                  <button type="button">
-                    <MdModeEdit size={20} />
-                  </button>
+                  <Link to={"/panel/update-order/" + data.id}>
+                    <button type="button" title="Editar">
+                      <MdModeEdit size={20} />
+                    </button>
+                  </Link>
                 </td>
                 <td>
-                  <button type="button">
+                  <button type="button" title="Excluir">
                     <MdDeleteForever size={20} />
                   </button>
                 </td>
