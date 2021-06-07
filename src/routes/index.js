@@ -14,6 +14,10 @@ import { CartPayment } from '../pages/CartPayment';
 import { Panel } from '../pages/panel';
 import { CreateUserForm } from '../pages/panel/UsersTab/CreateUserForm';
 import { EditUserForm } from '../pages/panel/UsersTab/EditUserForm';
+import { CreateProductForm } from '../pages/panel/ProductsTab/CreateProductForm';
+import { EditProductForm } from '../pages/panel/ProductsTab/EditProductForm';
+import { CreateProviderForm } from '../pages/panel/ProvidersTab/CreateProviderForm';
+import { EditProviderForm } from '../pages/panel/ProvidersTab/EditProviderForm';
 
 export function Routes() {
 
@@ -44,6 +48,14 @@ export function Routes() {
       <PrivateRoute path="/create-user-admin" exact component={CreateUserForm} />
 
       <PrivateRoute path="/update-user/:id" exact component={EditUserForm} />
+
+      <PrivateRoute path="/create-product" exact component={CreateProductForm} />
+
+      <PrivateRoute path="/update-product/:id" exact component={EditProductForm} />
+
+      <PrivateRoute path="/create-provider" exact component={CreateProviderForm} />
+
+      <PrivateRoute path="/update-provider/:id" exact component={EditProviderForm} />
 
     </Switch>
   );

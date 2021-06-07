@@ -2,27 +2,24 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { MdModeEdit, MdDeleteForever, MdAddCircle } from "react-icons/md";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useLoading } from "../../../hooks/useLoading";
-import { GetAllProduct } from "../../../services/productService";
+import {  DeleteProduct, GetAllProductAdmin } from "../../../services/productService";
 import { ButtonCreate, Product } from "../styles";
+import confirmService from "../../../components/confirmDialog";
 
 export function ProductsTab() {
   const [product, setProduct] = useState([]);
   const { setLoading } = useLoading();
 
-  const obj = {
-    limit: 0,
-    productName: ""
-  }
-
   useEffect(() => {
-    _getAllProduct(obj);
+    _getAllProduct();
   }, []);
 
-  const _getAllProduct = (obj) => {
+  const _getAllProduct = () => {
     setLoading(true);
-    GetAllProduct(obj).then(
+    GetAllProductAdmin().then(
       (resp) => {
         setProduct(resp.data);
         setLoading(false);
@@ -50,13 +47,35 @@ export function ProductsTab() {
     );
   };
 
+  const showDeleteDialog = async (id) => {
+    let props = {}
+
+    const result = await confirmService.show(props);
+    if (result) {
+      DeleteProduct(id).then(
+        (data) => {
+          toast.success("Produto deletado com sucesso!");
+          let tbl = product.filter(
+            (c) => !(c.id === id)
+          );
+          setProduct(tbl);
+        },
+        (error) => {
+          toast.error("Não foi possível deletar os dados.");
+        }
+      );
+    }
+  };
+
   return (
     <>
       <ButtonCreate>
         <div className="div-button">
-          <Button className="button-create-product" variant="outline-dark">
-            <MdAddCircle className="icon-button" size={20} /> Adicionar Produto
-      </Button>
+          <Link to="/create-product">
+            <Button className="button-create-product" variant="outline-dark">
+              <MdAddCircle className="icon-button" size={20} /> Adicionar Produto
+            </Button>
+          </Link>
         </div>
       </ ButtonCreate>
       {product.length >= 1 ? (
@@ -76,7 +95,7 @@ export function ProductsTab() {
           <tbody>
             {product.map((data, index) => (
               <tr key={index}>
-                <td>Foto do Produto</td>
+                <td> <img className="img-product" src={data.image} alt={data.model} /></td>
                 <td>{data.id}</td>
                 <td>
                   <span>{data.productName}</span>
@@ -86,12 +105,16 @@ export function ProductsTab() {
                 <td>{data.stockQuantity}</td>
                 <td>{data.provider.companyName}</td>
                 <td>
+                  <Link to={"/update-product/" + data.id}>
                   <button type="button">
                     <MdModeEdit size={20} />
                   </button>
+                  </Link>
                 </td>
                 <td>
-                  <button type="button">
+                  <button type="button" onClick={() =>
+                    showDeleteDialog(data.id)
+                  }>
                     <MdDeleteForever size={20} />
                   </button>
                 </td>
