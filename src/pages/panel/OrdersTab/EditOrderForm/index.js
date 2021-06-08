@@ -20,7 +20,7 @@ export function EditOrderForm() {
   const history = useHistory();
   const { user } = useAuth();
 
-  const { register, setValue, getValues, handleSubmit, watch } = useForm();
+  const { register, setValue, handleSubmit, watch } = useForm();
   const { setLoading } = useLoading();
 
   const [validationState, setValidationState] = useState([]);
