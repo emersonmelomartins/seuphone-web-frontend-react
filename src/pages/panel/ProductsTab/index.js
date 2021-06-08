@@ -72,7 +72,7 @@ export function ProductsTab() {
     <h5>Produtos</h5>
       <ButtonCreate>
         <div className="div-button">
-          <Link to="/create-product">
+          <Link to="/panel/create-product">
             <Button className="button-create-product" variant="outline-dark">
               <MdAddCircle className="icon-button" size={20} /> Adicionar Produto
             </Button>
@@ -106,7 +106,7 @@ export function ProductsTab() {
                 <td>{data.stockQuantity}</td>
                 <td>{data.provider.companyName}</td>
                 <td>
-                  <Link to={"/update-product/" + data.id}>
+                  <Link to={"/panel/update-product/" + data.id}>
                   <button type="button">
                     <MdModeEdit size={20} />
                   </button>

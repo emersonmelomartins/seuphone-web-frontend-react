@@ -73,7 +73,7 @@ export function ProvidersTab() {
     <h5>Fornecedores</h5>
       <ButtonCreate>
         <div className="div-button">
-          <Link to="/create-provider">
+          <Link to="/panel/create-provider">
             <Button className="button-create-provider" variant="outline-dark">
               <MdAddCircle className="icon-button" size={20} /> Adicionar Fornecedor
           </Button>
@@ -101,7 +101,7 @@ export function ProvidersTab() {
                 </td>
                 <td>{data.cnpj}</td>
                 <td>
-                  <Link to={"/update-provider/" + data.id}>
+                  <Link to={"/panel/update-provider/" + data.id}>
                     <button type="button">
                       <MdModeEdit size={20} />
                     </button>

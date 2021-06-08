@@ -8,6 +8,7 @@ import { useLoading } from "../../../../hooks/useLoading";
 import { GetAllRoles } from "../../../../services/roleService";
 import { GetUser, UpdateUserAdm } from "../../../../services/userService";
 import { cpfMask } from "../../../../util/cpfMask";
+import { zipCodeMask } from "../../../../util/zipCodeMask";
 import { ProfileContainer } from "../../styles";
 
 export function EditUserForm() {
@@ -16,6 +17,7 @@ export function EditUserForm() {
   const history = useHistory();
   const [validationState, setValidationState] = useState([]);
   const [cpfWithMask, setCpfWithMask] = useState("");
+  const [zipCodeWithMask, setZipCodeWithMask] = useState("");
   const [roles, setRoles] = useState([]);
 
   const params = useParams();
@@ -82,15 +84,19 @@ export function EditUserForm() {
         setValue("email", data.email);
         setValue("name", data.name);
         setValue("genre", data.genre);
-        setValue("cpf", data.cpf);
+        // setValue("cpf", data.cpf);
         setValue("birthdate", formattedBirthDate);
-        setValue("zipcode", data.zipCode);
+        // setValue("zipcode", data.zipCode);
         setValue("address", data.address);
         setValue("district", data.district);
         setValue("city", data.city);
         setValue("houseNumber", data.houseNumber);
         setValue("state", data.state);
         setValue("role", roleValue);
+
+        setCpfWithMask(data.cpf);
+        setZipCodeWithMask(data.zipCode);
+
 
         setLoading(false);
       },
@@ -259,6 +265,10 @@ export function EditUserForm() {
     setCpfWithMask(cpfMask(event.target.value));
   };
 
+  const onChangeZipCode = (event) => {
+    setZipCodeWithMask(zipCodeMask(event.target.value));
+  }; 
+
   function onSubmit(form) {
     if (!validationBeforeUpdate()) {
       editUser(form);
@@ -381,7 +391,6 @@ export function EditUserForm() {
               <div className="form-group col-md-4">
                 <label htmlFor="cpf">CPF</label>
                 <input
-                  {...register("cpf")}
                   type="text"
                   className="form-control"
                   id="cpf"
@@ -426,7 +435,6 @@ export function EditUserForm() {
               <div className="form-group col-md-4">
                 <label htmlFor="zipcode">CEP</label>
                 <input
-                  {...register("zipcode")}
                   type="text"
                   className="form-control"
                   id="zipcode"
@@ -436,6 +444,8 @@ export function EditUserForm() {
                   defaultValue=""
                   placeholder="Ex: 09112-000"
                   onBlur={viacepSearch}
+                  value={zipCodeWithMask}
+                  onChange={onChangeZipCode}
                   style={
                     validationState.zipcode !== undefined
                       ? { border: "1px solid red" }

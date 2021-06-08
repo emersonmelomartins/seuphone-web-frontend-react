@@ -11,14 +11,14 @@ import { Register } from '../pages/Register';
 import { ContractTerms } from '../pages/ContractTerms';
 import { UserOrderDetail } from '../pages/UserOrderDetail';
 import { CartPayment } from '../pages/CartPayment';
-import { Panel } from '../pages/panel';
-import { CreateUserForm } from '../pages/panel/UsersTab/CreateUserForm';
-import { EditUserForm } from '../pages/panel/UsersTab/EditUserForm';
-import { EditOrderForm } from '../pages/panel/OrdersTab/EditOrderForm';
-import { CreateProductForm } from '../pages/panel/ProductsTab/CreateProductForm';
-import { EditProductForm } from '../pages/panel/ProductsTab/EditProductForm';
-import { CreateProviderForm } from '../pages/panel/ProvidersTab/CreateProviderForm';
-import { EditProviderForm } from '../pages/panel/ProvidersTab/EditProviderForm';
+import { Panel } from '../pages/Panel';
+import { CreateUserForm } from '../pages/Panel/UsersTab/CreateUserForm';
+import { EditUserForm } from '../pages/Panel/UsersTab/EditUserForm';
+import { EditOrderForm } from '../pages/Panel/OrdersTab/EditOrderForm';
+import { CreateProductForm } from '../pages/Panel/ProductsTab/CreateProductForm';
+import { EditProductForm } from '../pages/Panel/ProductsTab/EditProductForm';
+import { CreateProviderForm } from '../pages/Panel/ProvidersTab/CreateProviderForm';
+import { EditProviderForm } from '../pages/Panel/ProvidersTab/EditProviderForm';
 import { About } from '../pages/About';
 import { ForgotPassword } from '../pages/ForgotPassword';
 import { NotFound } from '../pages/NotFound';
@@ -56,17 +56,18 @@ export function Routes() {
       <PrivateRoute path="/cart-payment" exact component={CartPayment} />
 
       <PrivateRoute path="/panel" exact component={Panel} />
-      <PrivateRoute path="/create-user-admin" exact component={CreateUserForm} />
-      <PrivateRoute path="/update-user/:id" exact component={EditUserForm} />
+      
+      <PrivateRoute path="/panel/create-user-admin" exact component={CreateUserForm} />
+      <PrivateRoute path="/panel/update-user/:id" exact component={EditUserForm} />
 
       <PrivateRoute path="/panel/create-order/" exact component={EditOrderForm} />
       <PrivateRoute path="/panel/update-order/:id" exact component={EditOrderForm} />
       
-      <PrivateRoute path="/create-product" exact component={CreateProductForm} />
-      <PrivateRoute path="/update-product/:id" exact component={EditProductForm} />
+      <PrivateRoute path="/panel/create-product" exact component={CreateProductForm} />
+      <PrivateRoute path="/panel/update-product/:id" exact component={EditProductForm} />
 
-      <PrivateRoute path="/create-provider" exact component={CreateProviderForm} />
-      <PrivateRoute path="/update-provider/:id" exact component={EditProviderForm} />
+      <PrivateRoute path="/panel/create-provider" exact component={CreateProviderForm} />
+      <PrivateRoute path="/panel/update-provider/:id" exact component={EditProviderForm} />
 
     </Switch>
   );

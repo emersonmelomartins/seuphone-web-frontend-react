@@ -361,7 +361,7 @@ export function Register() {
             <div className="form-group col-md-4">
               <label htmlFor="zipCode">CEP</label>
               <input
-                // {...register("zipCode")}
+                //{...register("zipCode")}
                 type="text"
                 className="form-control"
                 id="zipCode"
