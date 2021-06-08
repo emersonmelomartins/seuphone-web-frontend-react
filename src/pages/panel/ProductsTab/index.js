@@ -69,6 +69,7 @@ export function ProductsTab() {
 
   return (
     <>
+    <h5>Produtos</h5>
       <ButtonCreate>
         <div className="div-button">
           <Link to="/create-product">

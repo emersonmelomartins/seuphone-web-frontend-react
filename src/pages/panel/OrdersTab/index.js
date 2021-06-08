@@ -60,7 +60,7 @@ export function OrdersTab() {
 
   return (
     <>
-      <h5>Pedido de Compra</h5>
+      <h5>Pedidos de Compra</h5>
       <Link to="/panel/create-order">
         <ButtonCreate>
           <div className="div-button">

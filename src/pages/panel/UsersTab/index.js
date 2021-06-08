@@ -80,6 +80,7 @@ export function UsersTab() {
 
   return (
     <>
+    <h5>Usuários</h5>
       <ButtonCreate>
         <div className="div-button">
           <Link to="/create-user-admin">
