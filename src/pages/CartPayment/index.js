@@ -16,6 +16,7 @@ import { useCart } from "../../hooks/useCart";
 import { formatPrice } from "../../util/formatPrice";
 import { CreateOrder } from "../../services/orderService";
 import { useHistory } from "react-router";
+import { numberMask, expiryMask } from "../../util/creditCardMask";
 
 export function CartPayment() {
   const { cart, setCart } = useCart();
@@ -99,13 +100,13 @@ export function CartPayment() {
 
     switch (name) {
       case "number":
-        setNumber(value);
+        setNumber(numberMask(value));
         break;
       case "name":
         setName(value);
         break;
       case "expiry":
-        setExpiry(value);
+        setExpiry(expiryMask(value));
         break;
       case "cvc":
         setCvc(value);
@@ -339,12 +340,13 @@ export function CartPayment() {
                       <div className="form-group col-sm-8">
                         <label htmlFor="number">Número do Cartão</label>
                         <input
-                          type="number"
+                          type="text"
                           className="form-control"
                           id="number"
                           name="number"
                           placeholder="1234 5678 9101 1121"
-                          maxLength={16}
+                          maxLength={19}
+                          value={number}
                           onChange={handleInputChange}
                           onFocus={handleInputFocus}
                           style={
@@ -383,6 +385,7 @@ export function CartPayment() {
                           id="expiry"
                           name="expiry"
                           placeholder="01/02"
+                          value={expiry}
                           onChange={handleInputChange}
                           onFocus={handleInputFocus}
                           style={

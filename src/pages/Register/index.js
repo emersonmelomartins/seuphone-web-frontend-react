@@ -31,6 +31,7 @@ export function Register() {
         setValue("city", "...");
         setValue("district", "...");
         setValue("address", "...");
+        setValue("state", "...");
 
         const response = await axios.get(
           "https://viacep.com.br/ws/" + cep + "/json/"
@@ -41,6 +42,7 @@ export function Register() {
         setValue("city", viacep.localidade);
         setValue("district", viacep.bairro);
         setValue("address", viacep.logradouro);
+        setValue("state", viacep.uf);
       } else {
         toast.error("Cep inválido!");
       }
@@ -379,7 +381,7 @@ export function Register() {
           </div>
 
           <div className="form-row">
-            <div className="form-group col-md-6">
+            <div className="form-group col-md-8">
               <label htmlFor="address">Logradouro</label>
               <input
                 {...register("address")}
@@ -390,23 +392,6 @@ export function Register() {
                 placeholder="Ex: Rua Machado de Assis"
                 style={
                   validationState.address !== undefined
-                    ? { border: "1px solid red" }
-                    : {}
-                }
-              />
-            </div>
-
-                        <div className="form-group col-md-2">
-              <label htmlFor="houseNumber">Número</label>
-              <input
-                {...register("houseNumber")}
-                type="text"
-                className="form-control"
-                id="houseNumber"
-                name="houseNumber"
-                placeholder="Ex: 123"
-                style={
-                  validationState.houseNumber !== undefined
                     ? { border: "1px solid red" }
                     : {}
                 }

@@ -21,6 +21,8 @@ export function AddressTab({ userInfo }) {
     setValue("zipCode", userInfo.zipCode);
     setValue("district", userInfo.district);
     setValue("houseNumber", userInfo.houseNumber);
+
+    userInfo.zipCode !== undefined && setZipCodeWithMask(zipCodeMask(userInfo.zipCode));
   }, [setValue, userInfo]);
 
 

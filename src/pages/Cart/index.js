@@ -9,10 +9,12 @@ import {
 
 import { useCart } from "../../hooks/useCart";
 import { formatPrice } from "../../util/formatPrice";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export function Cart() {
   const { cart, removeProduct, updateProductCartQuantity } = useCart();
+  const history = useHistory();
   const cartSize = cart.length;
 
   const formattedCart = cart.map((product) => ({
@@ -46,6 +48,15 @@ export function Cart() {
 
   function handleRemoveProduct(id) {
     removeProduct(id);
+  }
+
+  function nextStep() {
+    if(cartSize < 1) {
+      toast.error("Você precisa ter ao menos um produto em seu carrinho.");
+      return;
+    }
+
+    history.push("/contract")
   }
 
   return (
@@ -121,14 +132,15 @@ export function Cart() {
           )}
 
           <footer>
-            <Link to="/contract">
+            {/* <Link to="/contract"> */}
               <button
                 type="button"
                 className="btn btn-seuphone-outline-black btn-rounded-seuphone"
+                onClick={() => nextStep()}
               >
                 Ir para próximo passo
               </button>
-            </Link>
+            {/* </Link> */}
 
             <Total>
               <span>TOTAL</span>
