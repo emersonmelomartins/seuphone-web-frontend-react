@@ -82,7 +82,7 @@ export function UsersTab() {
     <>
       <ButtonCreate>
         <div className="div-button">
-          <Link to="/create-user-admin">
+          <Link to="/panel/create-user-admin">
             <Button className="button-create" variant="outline-dark" to="/create-user-admin">
               <MdAddCircle className="icon-button" size={20} /> Criar Usuário
             </Button>
@@ -116,7 +116,7 @@ export function UsersTab() {
                 </td>
                 <td>{data.hasAdmin === true ? "Admin" : "Cliente"}</td>
                 <td>
-                  <Link to={"/update-user/" + data.id}>
+                  <Link to={"/panel/update-user/" + data.id}>
                     <button>
                       <MdModeEdit size={20} />
                     </button>

@@ -8,6 +8,7 @@ import { useLoading } from "../../../../hooks/useLoading";
 import { GetAllRoles } from "../../../../services/roleService";
 import { CreateUserAdmin } from "../../../../services/userService";
 import { cpfMask } from "../../../../util/cpfMask";
+import { zipCodeMask } from "../../../../util/zipCodeMask";
 import {ProfileContainer } from "../../styles";
 
 export function CreateUserForm() {
@@ -16,6 +17,7 @@ export function CreateUserForm() {
   const history = useHistory();
   const [validationState, setValidationState] = useState([]);
   const [cpfWithMask, setCpfWithMask] = useState("");
+  const [zipCodeWithMask, setZipCodeWithMask] = useState("");
   const [roles, setRoles] = useState([]);
 
   useEffect(() => {
@@ -238,6 +240,10 @@ export function CreateUserForm() {
     setCpfWithMask(cpfMask(event.target.value));
   };
 
+  const onChangeZipCode = (event) => {
+    setZipCodeWithMask(zipCodeMask(event.target.value));
+  };
+
   function onSubmit(form) {
     if (!validationBeforeCreate()) {
       createNewUser(form);
@@ -410,6 +416,8 @@ export function CreateUserForm() {
                   defaultValue=""
                   placeholder="Ex: 09112-000"
                   onBlur={viacepSearch}
+                  value={zipCodeWithMask}
+                  onChange={onChangeZipCode}
                   style={
                     validationState.zipcode !== undefined
                       ? { border: "1px solid red" }
