@@ -2,31 +2,42 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useLoading } from "../../../../hooks/useLoading";
-import { GetAllRoles } from "../../../../services/roleService";
-import { CreateUserAdmin } from "../../../../services/userService";
-import { cpfMask } from "../../../../util/cpfMask";
-import {ProfileContainer } from "../../styles";
+import { GetProvider, UpdateProvider } from "../../../../services/providerService";
+import { ProfileContainer } from "../../styles";
 
-export function CreateUserForm() {
-  const { register, setValue, getValues, handleSubmit, watch } = useForm();
+export function EditProviderForm() {
+  const { register, setValue, handleSubmit, watch } = useForm();
   const { setLoading } = useLoading();
   const history = useHistory();
   const [validationState, setValidationState] = useState([]);
-  const [cpfWithMask, setCpfWithMask] = useState("");
-  const [roles, setRoles] = useState([]);
+  const [provider, setProvider] = useState([])
+
+  const params = useParams();
+  const idProvider = params.id;
 
   useEffect(() => {
-    _getAllRoles()
+    _getProvider();
   }, []);
 
-  const _getAllRoles = () => {
+  const _getProvider = () => {
     setLoading(true);
-    GetAllRoles().then(
+    GetProvider(idProvider).then(
       (resp) => {
-        setRoles(resp.data);
+        let data = resp.data
+
+        setProvider(data)
+
+        setValue("companyName", data.companyName);
+        setValue("cnpj", data.cnpj);
+        setValue("zipCode", data.zipCode);
+        setValue("address", data.address);
+        setValue("houseNumber", data.houseNumber);
+        setValue("district", data.district);
+        setValue("city", data.city);
+        setValue("state", data.state);
         setLoading(false);
       },
       (error) => {
@@ -88,62 +99,26 @@ export function CreateUserForm() {
     let hasError = false;
     let validationState = {};
 
-    if (form.email === undefined || form.email === null || form.email === "") {
+    if (form.zipCode === undefined || form.zipCode === null || form.zipCode === "") {
       hasError = true;
-      validationState.email = "error";
-      toast.error("Você precisa informar o e-mail.");
+      validationState.zipCode = "error";
+      toast.error("Você precisa informar o CEP.");
     }
 
-    if (
-      form.password === undefined ||
-      form.password === null ||
-      form.password === ""
-    ) {
-      hasError = true;
-      validationState.password = "error";
-      toast.error("Você precisa informar a senha.");
-    }
-
-    if (form.name === undefined || form.name === null || form.name === "") {
-      hasError = true;
-      validationState.name = "error";
-      toast.error("Você precisa informar o nome.");
-    }
-
-    if (form.cpf === undefined || form.cpf === null || form.cpf === "") {
-      hasError = true;
-      validationState.cpf = "error";
-      toast.error("Você precisa informar o cpf.");
-    }
-
-    if (
-      form.birthdate === undefined ||
-      form.birthdate === null ||
-      form.birthdate === ""
-    ) {
-      hasError = true;
-      validationState.birthdate = "error";
-      toast.error("Você precisa informar a data de nascimento.");
-    }
-
-    if (
-      form.zipcode === undefined ||
-      form.zipcode === null ||
-      form.zipcode === ""
-    ) {
-      hasError = true;
-      validationState.zipcode = "error";
-      toast.error("Você precisa informar o cep.");
-    }
-
-    if (
-      form.address === undefined ||
-      form.address === null ||
-      form.address === ""
-    ) {
+    if (form.address === undefined || form.address === null || form.address === "") {
       hasError = true;
       validationState.address = "error";
       toast.error("Você precisa informar o logradouro.");
+    }
+
+    if (
+      form.houseNumber === undefined ||
+      form.houseNumber === null ||
+      form.houseNumber === ""
+    ) {
+      hasError = true;
+      validationState.houseNumber = "error";
+      toast.error("Você precisa informar o número do estabelecimento.");
     }
 
     if (
@@ -152,66 +127,49 @@ export function CreateUserForm() {
       form.district === ""
     ) {
       hasError = true;
-      validationState.district = "error";
+      validationState.zipcode = "error";
       toast.error("Você precisa informar o bairro.");
     }
 
-    if (form.city === undefined || form.city === null || form.city === "") {
+    if (
+      form.city === undefined ||
+      form.city === null ||
+      form.city === ""
+    ) {
       hasError = true;
       validationState.city = "error";
       toast.error("Você precisa informar a cidade.");
     }
 
-    if (form.state === undefined || form.state === null || form.state === "") {
+    if (
+      form.state === undefined ||
+      form.state === null ||
+      form.state === ""
+    ) {
       hasError = true;
       validationState.state = "error";
       toast.error("Você precisa informar o estado.");
-    }
-
-    if (form.houseNumber === undefined || form.houseNumber === null || form.houseNumber === "") {
-      hasError = true;
-      validationState.houseNumber = "error";
-      toast.error("Você precisa informar o número da residência.");
-    }
-
-
-    if (form.role === undefined || form.role === null || form.role === "") {
-      hasError = true;
-      validationState.role = "error";
-      toast.error("Você precisa informar uma permissão.");
-    }
-
-
-
-    var mailPattern = new RegExp(
-      /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
-    );
-
-    if (!mailPattern.test(getValues("email"))) {
-      hasError = true;
-      validationState.email = "error";
-      toast.error("E-mail informado inválido, tente novamente.");
     }
 
     setValidationState(validationState);
     return hasError;
   };
 
-  const createNewUser = (form) => {
+  const updateProvider = (form) => {
     setLoading(true);
+
 
     let data = {
       ...form,
-      userRoles: [
-        {
-          roleId: form.role
-        }
-      ]
+      companyName: provider.companyName,
+      cnpj: provider.cnpj,
+      id: idProvider
     }
-    CreateUserAdmin(data).then(
+
+    UpdateProvider(data, idProvider).then(
       (resp) => {
         setLoading(false);
-        toast.success("Usuário criado com sucesso!");
+        toast.success("Fornecedor editado com sucesso!");
         history.push('/panel')
       },
       (error) => {
@@ -236,13 +194,9 @@ export function CreateUserForm() {
     );
   };
 
-  const onChangeCpf = (event) => {
-    setCpfWithMask(cpfMask(event.target.value));
-  };
-
   function onSubmit(form) {
     if (!validationBeforeCreate()) {
-      createNewUser(form);
+      updateProvider(form);
     }
   }
 
@@ -252,25 +206,26 @@ export function CreateUserForm() {
       <div className="container py-5">
         <div className="bg-light p-5 mx-auto styled-form">
 
-          <h1 className="py-2 text-uppercase">Cadastro Usuário</h1>
+          <h1 className="py-2 text-uppercase">Cadastro de Fornecedor</h1>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="p-5 mx-auto"
           >
             <br />
-            <h4>Informações de Login</h4>
+            <h4>Informações do Fornecedor</h4>
             <div className="form-row">
               <div className="form-group col-md-6">
-                <label htmlFor="email">E-mail</label>
+                <label htmlFor="companyName">Nome Fantasia</label>
                 <input
-                  {...register("email")}
-                  type="email"
+                  {...register("companyName")}
+                  type="text"
                   className="form-control"
-                  id="email"
-                  name="email"
-                  placeholder="Ex: seuemail@email.com"
+                  id="companyName"
+                  name="companyName"
+                  disabled
+                  placeholder="Ex: Apple LTDA."
                   style={
-                    validationState.email !== undefined
+                    validationState.companyName !== undefined
                       ? { border: "1px solid red" }
                       : {}
                   }
@@ -280,14 +235,16 @@ export function CreateUserForm() {
 
             <div className="form-row">
               <div className="form-group col-md-6">
-                <label htmlFor="password">Senha</label>
+                <label htmlFor="cnpj">CNPJ</label>
                 <input
-                  {...register("password")}
-                  type="password"
+                  {...register("cnpj")}
+                  type="cnpj"
                   className="form-control"
-                  id="password"
-                  name="password"
-                  placeholder="*******"
+                  id="cnpj"
+                  name="cnpj"
+                  maxLength="18"
+                  disabled
+                  placeholder="Ex: 00.623.904/0001-73"
                   style={
                     validationState.password !== undefined
                       ? { border: "1px solid red" }
@@ -297,116 +254,19 @@ export function CreateUserForm() {
               </div>
             </div>
 
-            <div className="form-row">
-              <div className="form-group col-md-6">
-                <label htmlFor="confirmPassword">Confirmar Senha</label>
-                <input
-                  {...register("confirmPassword")}
-                  type="password"
-                  className="form-control"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  placeholder="*******"
-                  style={
-                    validationState.confirmPassword !== undefined
-                      ? { border: "1px solid red" }
-                      : {}
-                  }
-                />
-              </div>
-            </div>
-
             <br />
-            <h4>Informações Pessoais</h4>
-            <div className="form-row">
-              <div className="form-group col-md-6">
-                <label htmlFor="name">Nome Completo</label>
-                <input
-                  {...register("name")}
-                  type="text"
-                  className="form-control"
-                  id="name"
-                  name="name"
-                  placeholder="Ex: João da Silva"
-                  style={
-                    validationState.name !== undefined
-                      ? { border: "1px solid red" }
-                      : {}
-                  }
-                />
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group col-md-4">
-                <label htmlFor="genre">Sexo</label>
-                <select
-                  id="genre"
-                  name="genre"
-                  {...register("genre")}
-                  className="form-control"
-                  defaultValue=""
-                >
-                  <option value="">Selecione o sexo...</option>
-                  <option value="M">Masculino</option>
-                  <option value="F">Feminino</option>
-                  <option value="X">Prefiro não informar</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group col-md-4">
-                <label htmlFor="cpf">CPF</label>
-                <input
-                  {...register("cpf")}
-                  type="text"
-                  className="form-control"
-                  id="cpf"
-                  name="cpf"
-                  placeholder="Ex: 123.456.789-10"
-                  maxLength={14}
-                  onChange={onChangeCpf}
-                  value={cpfWithMask}
-                  style={
-                    validationState.cpf !== undefined
-                      ? { border: "1px solid red" }
-                      : {}
-                  }
-                />
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group col-md-4">
-                <label htmlFor="birthdate">Data de Nascimento</label>
-                <input
-                  {...register("birthdate")}
-                  type="date"
-                  className="form-control"
-                  id="birthdate"
-                  name="birthdate"
-                  defaultValue=""
-                  style={
-                    validationState.birthdate !== undefined
-                      ? { border: "1px solid red" }
-                      : {}
-                  }
-                />
-              </div>
-            </div>
 
             <br />
             <h4>Endereço</h4>
             <div className="form-row">
               <div className="form-group col-md-4">
-                <label htmlFor="zipcode">CEP</label>
+                <label htmlFor="zipCode">CEP</label>
                 <input
-                  {...register("zipcode")}
+                  {...register("zipCode")}
                   type="text"
                   className="form-control"
-                  id="zipcode"
-                  name="zipcode"
+                  id="zipCode"
+                  name="zipCode"
                   size="10"
                   maxLength="9"
                   defaultValue=""
@@ -539,41 +399,20 @@ export function CreateUserForm() {
               </div>
             </div>
 
-            <div className="form-row">
-              <div className="form-group col-md-4">
-                <label htmlFor="role">Permissão</label>
-                <select
-                  id="role"
-                  name="role"
-                  {...register("role")}
-                  className="form-control"
-                  style={
-                    validationState.role !== undefined
-                      ? { border: "1px solid red" }
-                      : {}
-                  }
-                >
-                  <option value="">Selecione a Permissão...</option>
-                  {roles.map((data, index) => (
-                    <option key={index} value={data.id}>{data.description}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
             <button
               type="submit"
               className="btn btn-outline-success btn-rounded-seuphone"
             >
-              <i className="far fa-circle"></i> Cadastrar
+              <i className="far fa-circle"></i> Salvar
           </button>
 
-          <Link to="/panel">
-            <button
-              className="btn btn-outline-danger btn-rounded-seuphone"
-            >
-              <i className="far fa-circle"></i> Voltar
+            <Link to="/panel">
+              <button
+                className="btn btn-outline-danger btn-rounded-seuphone"
+              >
+                <i className="far fa-circle"></i> Voltar
           </button>
-              </Link>
+            </Link>
           </form>
 
         </div>

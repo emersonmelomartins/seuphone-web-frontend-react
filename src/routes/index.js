@@ -15,6 +15,10 @@ import { Panel } from '../pages/panel';
 import { CreateUserForm } from '../pages/panel/UsersTab/CreateUserForm';
 import { EditUserForm } from '../pages/panel/UsersTab/EditUserForm';
 import { EditOrderForm } from '../pages/panel/OrdersTab/EditOrderForm';
+import { CreateProductForm } from '../pages/panel/ProductsTab/CreateProductForm';
+import { EditProductForm } from '../pages/panel/ProductsTab/EditProductForm';
+import { CreateProviderForm } from '../pages/panel/ProvidersTab/CreateProviderForm';
+import { EditProviderForm } from '../pages/panel/ProvidersTab/EditProviderForm';
 
 export function Routes() {
 
@@ -48,6 +52,14 @@ export function Routes() {
 
       <PrivateRoute path="/panel/create-order/" exact component={EditOrderForm} />
       <PrivateRoute path="/panel/update-order/:id" exact component={EditOrderForm} />
+      
+      <PrivateRoute path="/create-product" exact component={CreateProductForm} />
+
+      <PrivateRoute path="/update-product/:id" exact component={EditProductForm} />
+
+      <PrivateRoute path="/create-provider" exact component={CreateProviderForm} />
+
+      <PrivateRoute path="/update-provider/:id" exact component={EditProviderForm} />
 
     </Switch>
   );

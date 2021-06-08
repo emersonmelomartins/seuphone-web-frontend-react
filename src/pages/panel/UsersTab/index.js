@@ -85,7 +85,7 @@ export function UsersTab() {
           <Link to="/create-user-admin">
             <Button className="button-create" variant="outline-dark" to="/create-user-admin">
               <MdAddCircle className="icon-button" size={20} /> Criar Usuário
-      </Button>
+            </Button>
           </Link>
         </div>
       </ ButtonCreate>

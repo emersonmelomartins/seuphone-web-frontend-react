@@ -2,10 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { MdModeEdit, MdDeleteForever, MdAddCircle } from "react-icons/md";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useLoading } from "../../../hooks/useLoading";
-import { GetAllProviders } from "../../../services/providerService/index";
+import { DeleteProvider, GetAllProviders } from "../../../services/providerService/index";
 import { ButtonCreate, Provider } from "../styles";
+import confirmService from "../../../components/confirmDialog";
 
 
 export function ProvidersTab() {
@@ -45,14 +47,36 @@ export function ProvidersTab() {
       }
     );
   };
-  
+
+  const showDeleteDialog = async (id) => {
+    let props = {}
+
+    const result = await confirmService.show(props);
+    if (result) {
+      DeleteProvider(id).then(
+        (data) => {
+          toast.success("Fornecedor deletado com sucesso!");
+          let tbl = providers.filter(
+            (c) => !(c.id === id)
+          );
+          setProviders(tbl);
+        },
+        (error) => {
+          toast.error("Não foi possível deletar os dados.");
+        }
+      );
+    }
+  };
+
   return (
     <>
       <ButtonCreate>
         <div className="div-button">
-          <Button className="button-create-provider" variant="outline-dark">
-            <MdAddCircle className="icon-button" size={20} /> Adicionar Fornecedor
-      </Button>
+          <Link to="/create-provider">
+            <Button className="button-create-provider" variant="outline-dark">
+              <MdAddCircle className="icon-button" size={20} /> Adicionar Fornecedor
+          </Button>
+          </Link>
         </div>
       </ ButtonCreate>
       {providers.length >= 1 ? (
@@ -72,16 +96,20 @@ export function ProvidersTab() {
               <tr key={index}>
                 <td>{data.id}</td>
                 <td>
-                 {data.companyName}
+                  {data.companyName}
                 </td>
                 <td>{data.cnpj}</td>
                 <td>
-                  <button type="button">
-                    <MdModeEdit size={20} />
-                  </button>
+                  <Link to={"/update-provider/" + data.id}>
+                    <button type="button">
+                      <MdModeEdit size={20} />
+                    </button>
+                  </Link>
                 </td>
                 <td>
-                  <button type="button">
+                  <button type="button" onClick={() =>
+                    showDeleteDialog(data.id)
+                  }>
                     <MdDeleteForever size={20} />
                   </button>
                 </td>

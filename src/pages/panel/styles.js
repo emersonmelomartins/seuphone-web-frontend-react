@@ -169,6 +169,10 @@ export const Product = styled.table`
       transition: color 0.2s;
     }
   }
+
+  .img-product {
+    width: 50px;
+  }
 `;
 
 export const Provider = styled.table`
