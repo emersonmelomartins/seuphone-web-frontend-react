@@ -52,7 +52,7 @@ export function EditOrderForm() {
     setLoading(true);
     GetOrder(id).then(
       (resp) => {
-        console.log(resp.data);
+
         const [day, month, year] = new Date(resp.data.creationDate)
           .toLocaleDateString()
           .split("/");
@@ -327,6 +327,7 @@ export function EditOrderForm() {
     }
 
     if (
+      isNew &&
       form.paymentMethod === undefined ||
       form.paymentMethod === null ||
       form.paymentMethod === ""

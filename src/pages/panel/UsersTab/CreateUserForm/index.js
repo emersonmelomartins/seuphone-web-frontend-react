@@ -127,9 +127,9 @@ export function CreateUserForm() {
     }
 
     if (
-      form.zipcode === undefined ||
-      form.zipcode === null ||
-      form.zipcode === ""
+      zipCodeWithMask === undefined ||
+      zipCodeWithMask === null ||
+      zipCodeWithMask === ""
     ) {
       hasError = true;
       validationState.zipcode = "error";
@@ -202,12 +202,14 @@ export function CreateUserForm() {
 
     let data = {
       ...form,
+      zipcode: zipCodeWithMask,
       userRoles: [
         {
           roleId: form.role
         }
       ]
     }
+
     CreateUserAdmin(data).then(
       (resp) => {
         setLoading(false);

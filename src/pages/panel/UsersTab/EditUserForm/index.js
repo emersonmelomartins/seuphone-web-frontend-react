@@ -164,9 +164,9 @@ export function EditUserForm() {
     }
 
     if (
-      form.zipcode === undefined ||
-      form.zipcode === null ||
-      form.zipcode === ""
+      zipCodeWithMask === undefined ||
+      zipCodeWithMask === null ||
+      zipCodeWithMask === ""
     ) {
       hasError = true;
       validationState.zipcode = "error";
@@ -221,7 +221,7 @@ export function EditUserForm() {
     let data = {
       password: form.password,
       confirmPassword: form.confirmPassword,
-      zipCode: form.zipcode,
+      zipCode: zipCodeWithMask,
       address: form.address,
       houseNumber: form.houseNumber,
       district: form.district,
@@ -233,6 +233,7 @@ export function EditUserForm() {
         }
       ]
     }
+
     UpdateUserAdm(data, idUser).then(
       (resp) => {
         setLoading(false);

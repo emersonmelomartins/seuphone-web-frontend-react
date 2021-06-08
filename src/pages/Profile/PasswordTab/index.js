@@ -44,8 +44,6 @@ export function PasswordTab({ userInfo }) {
       userid: userInfo.id
     }
 
-    console.log(obj);
-
     setLoading(true);
     UpdateUserPassword(obj).then(
       (resp) => {

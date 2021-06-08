@@ -71,7 +71,7 @@ export function CreateProviderForm() {
       toast.error("Você precisa informar o Cnpj.");
     }
 
-    if (form.zipCode === undefined || form.zipCode === null || form.zipCode === "") {
+    if (zipCodeWithMask === undefined || zipCodeWithMask === null || zipCodeWithMask === "") {
       hasError = true;
       validationState.zipCode = "error";
       toast.error("Você precisa informar o CEP.");
@@ -130,7 +130,12 @@ export function CreateProviderForm() {
   const createNewProvider = (form) => {
     setLoading(true);
 
-    CreateProvider(form).then(
+    let data = {
+      ...form,
+      zipCode: zipCodeWithMask
+    }
+
+    CreateProvider(data).then(
       (resp) => {
         setLoading(false);
         toast.success("Fornecedor cadastrado com sucesso!");

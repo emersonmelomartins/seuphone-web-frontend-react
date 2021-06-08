@@ -105,7 +105,7 @@ export function EditProviderForm() {
     let hasError = false;
     let validationState = {};
 
-    if (form.zipCode === undefined || form.zipCode === null || form.zipCode === "") {
+    if (zipCodeWithMask === undefined || zipCodeWithMask === null || zipCodeWithMask === "") {
       hasError = true;
       validationState.zipCode = "error";
       toast.error("Você precisa informar o CEP.");
@@ -167,6 +167,7 @@ export function EditProviderForm() {
 
     let data = {
       ...form,
+      zipCode: zipCodeWithMask,
       companyName: provider.companyName,
       cnpj: provider.cnpj,
       id: idProvider
