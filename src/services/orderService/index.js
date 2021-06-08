@@ -21,6 +21,17 @@ export async function GetOrderPDF(id) {
 });
 }
 
+export async function GetOrderInvoicePDF(id) {
+  return await axios(`/${route}/${id}/invoice-pdf`, {
+    method: 'GET',
+            headers: {
+          'Content-Type': 'application/pdf',
+        },
+        responseType: 'blob', 
+    baseURL
+});
+}
+
 export async function GetAllOrderByUser(id) {
   return await api.get(`/${route}/user/${id}`);
 }

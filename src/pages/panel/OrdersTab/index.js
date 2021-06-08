@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
+import { saveAs } from "file-saver";
 import {
   MdModeEdit,
   // MdDeleteForever,
@@ -10,7 +11,7 @@ import {
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useLoading } from "../../../hooks/useLoading";
-import { GetAllOrders } from "../../../services/orderService";
+import { GetAllOrders, GetOrderInvoicePDF } from "../../../services/orderService";
 import { formatPrice } from "../../../util/formatPrice";
 import { ButtonCreate, Orders } from "../styles";
 
@@ -35,6 +36,39 @@ export function OrdersTab() {
         });
         setOrders(updatedData);
         setLoading(false);
+      },
+      (error) => {
+        setLoading(false);
+        try {
+          const erro = error.response.data;
+          if (erro !== undefined) {
+            if (typeof erro.errors === "object") {
+              Object.values(erro.errors).forEach((e) => {
+                toast.error(e[0]);
+              });
+            } else {
+              toast.error(erro);
+            }
+          } else {
+            toast.error("Não foi possível carregar os dados.");
+          }
+        } catch (e) {
+          toast.error("Ocorreu um erro interno.");
+        }
+      }
+    );
+  };
+
+    const _getOrderInvoicePDF = (id) => {
+    setLoading(true);
+    GetOrderInvoicePDF(id).then(
+      (resp) => {
+        setLoading(false);
+        const file = new Blob([resp.data], { type: "application/pdf" });
+
+        const fileURL = URL.createObjectURL(file);
+
+        saveAs(fileURL, `seuphone-nota-fiscal-${id}.pdf`);
       },
       (error) => {
         setLoading(false);
@@ -96,7 +130,7 @@ export function OrdersTab() {
                 </td>
                 <td>
                   <button type="button" title="Visualizar Nota Fiscal">
-                    <MdVisibility size={20} />
+                    <MdVisibility size={20} onClick={() => _getOrderInvoicePDF(data.id)} />
                   </button>
                 </td>
                 <td>

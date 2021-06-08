@@ -436,7 +436,7 @@ export function EditOrderForm() {
                 )}
               </select>
             </div>
-
+{/* 
             {orderType === 2 ||
               (!isNew && (
                 <div className="form-group col-md-4">
@@ -458,10 +458,10 @@ export function EditOrderForm() {
                     <option value="2">2 anos</option>
                   </select>
                 </div>
-              ))}
+              ))} */}
           </div>
 
-          {!isNew && order.contractDuration > 0 && (
+          {/* {!isNew && order.contractDuration > 0 && (
             <div className="form-row">
               <div className="form-group col-md-4">
                 <label htmlFor="creationDate">Data de Início</label>
@@ -491,7 +491,7 @@ export function EditOrderForm() {
                 />
               </div>
             </div>
-          )}
+          )} */}
 
           {!isNew ? (
             <div className="form-row">
