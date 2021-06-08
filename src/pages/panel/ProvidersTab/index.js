@@ -70,6 +70,7 @@ export function ProvidersTab() {
 
   return (
     <>
+    <h5>Fornecedores</h5>
       <ButtonCreate>
         <div className="div-button">
           <Link to="/panel/create-provider">

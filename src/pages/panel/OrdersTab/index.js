@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import {
   MdModeEdit,
-  MdDeleteForever,
+  // MdDeleteForever,
   MdAddCircle,
   MdVisibility,
 } from "react-icons/md";
@@ -60,6 +60,7 @@ export function OrdersTab() {
 
   return (
     <>
+      <h5>Pedidos de Compra</h5>
       <Link to="/panel/create-order">
         <ButtonCreate>
           <div className="div-button">
@@ -105,17 +106,17 @@ export function OrdersTab() {
                     </button>
                   </Link>
                 </td>
-                <td>
+                {/* <td>
                   <button type="button" title="Excluir">
                     <MdDeleteForever size={20} />
                   </button>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>
         </Orders>
       ) : (
-        <p>Não há Pedidos de Compra de Estoque.</p>
+        <p>Não há Pedidos de Compra.</p>
       )}
     </>
   );

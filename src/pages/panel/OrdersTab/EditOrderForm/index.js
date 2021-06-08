@@ -208,7 +208,6 @@ export function EditOrderForm() {
       total: order.total,
       creationDate: new Date().toLocaleDateString(),
     };
-    console.log("obj", obj);
 
     CreateOrder(obj).then(
       (resp) => {
@@ -325,6 +324,21 @@ export function EditOrderForm() {
       hasError = true;
       validationState.orderStatus = "error";
       toast.error("Você precisa informar a situação.");
+    }
+
+    if (
+      form.paymentMethod === undefined ||
+      form.paymentMethod === null ||
+      form.paymentMethod === ""
+    ) {
+      hasError = true;
+      validationState.paymentMethod = "error";
+      toast.error("Você precisa informar o método de pagamento.");
+    }
+
+    if(Object.keys(order).length < 1) {
+            hasError = true;
+      toast.error("Você precisa inserir pelo menos um produto.");
     }
 
     setValidationState(validationState);
