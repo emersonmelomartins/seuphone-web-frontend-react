@@ -71,8 +71,6 @@ export function CreateUserForm() {
 
         const viacep = response.data;
 
-        console.log(viacep)
-
         setValue("city", viacep.localidade);
         setValue("district", viacep.bairro);
         setValue("address", viacep.logradouro);
