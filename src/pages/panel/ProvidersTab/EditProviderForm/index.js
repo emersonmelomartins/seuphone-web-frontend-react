@@ -6,6 +6,8 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useLoading } from "../../../../hooks/useLoading";
 import { GetProvider, UpdateProvider } from "../../../../services/providerService";
+import { cnpjMask } from "../../../../util/cnpjMask";
+import { zipCodeMask } from "../../../../util/zipCodeMask";
 import { ProfileContainer } from "../../styles";
 
 export function EditProviderForm() {
@@ -14,6 +16,8 @@ export function EditProviderForm() {
   const history = useHistory();
   const [validationState, setValidationState] = useState([]);
   const [provider, setProvider] = useState([])
+  const [cnpjWithMask, setCnpjWithMask] = useState("");
+  const [zipCodeWithMask, setZipCodeWithMask] = useState("");
 
   const params = useParams();
   const idProvider = params.id;
@@ -31,13 +35,17 @@ export function EditProviderForm() {
         setProvider(data)
 
         setValue("companyName", data.companyName);
-        setValue("cnpj", data.cnpj);
-        setValue("zipCode", data.zipCode);
+        // setValue("cnpj", data.cnpj);
+        // setValue("zipCode", data.zipCode);
         setValue("address", data.address);
         setValue("houseNumber", data.houseNumber);
         setValue("district", data.district);
         setValue("city", data.city);
         setValue("state", data.state);
+
+        setCnpjWithMask(data.cnpj);
+        setZipCodeWithMask(data.zipCode);
+
         setLoading(false);
       },
       (error) => {
@@ -192,6 +200,14 @@ export function EditProviderForm() {
     );
   };
 
+  const onChangeCnpj = (event) => {
+    setCnpjWithMask(cnpjMask(event.target.value));
+  };
+
+  const onChangeZipCode = (event) => {
+    setZipCodeWithMask(zipCodeMask(event.target.value));
+  };
+
   function onSubmit(form) {
     if (!validationBeforeCreate()) {
       updateProvider(form);
@@ -204,7 +220,7 @@ export function EditProviderForm() {
       <div className="container py-5">
         <div className="bg-light p-5 mx-auto styled-form">
 
-          <h1 className="py-2 text-uppercase">Cadastro de Fornecedor</h1>
+          <h1 className="py-2 text-uppercase">Editar Fornecedor</h1>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="p-5 mx-auto"
@@ -243,8 +259,10 @@ export function EditProviderForm() {
                   maxLength="18"
                   disabled
                   placeholder="Ex: 00.623.904/0001-73"
+                  value={cnpjWithMask}
+                  onChange={onChangeCnpj}
                   style={
-                    validationState.password !== undefined
+                    validationState.cnpj !== undefined
                       ? { border: "1px solid red" }
                       : {}
                   }
@@ -270,8 +288,10 @@ export function EditProviderForm() {
                   defaultValue=""
                   placeholder="Ex: 09112-000"
                   onBlur={viacepSearch}
+                  value={zipCodeWithMask}
+                  onChange={onChangeZipCode}
                   style={
-                    validationState.zipcode !== undefined
+                    validationState.zipCode !== undefined
                       ? { border: "1px solid red" }
                       : {}
                   }

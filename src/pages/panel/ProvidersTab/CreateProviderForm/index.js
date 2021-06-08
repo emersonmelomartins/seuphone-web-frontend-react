@@ -6,6 +6,8 @@ import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useLoading } from "../../../../hooks/useLoading";
 import { CreateProvider } from "../../../../services/providerService";
+import { zipCodeMask } from "../../../../util/zipCodeMask";
+import { cnpjMask } from "../../../../util/cnpjMask";
 import { ProfileContainer } from "../../styles";
 
 export function CreateProviderForm() {
@@ -13,6 +15,8 @@ export function CreateProviderForm() {
   const { setLoading } = useLoading();
   const history = useHistory();
   const [validationState, setValidationState] = useState([]);
+  const [cnpjWithMask, setCnpjWithMask] = useState("");
+  const [zipCodeWithMask, setZipCodeWithMask] = useState("");
 
   useEffect(() => {
   }, []);
@@ -63,8 +67,8 @@ export function CreateProviderForm() {
       form.cnpj === ""
     ) {
       hasError = true;
-      validationState.password = "error";
-      toast.error("Você precisa informar o cnpj.");
+      validationState.cnpj = "error";
+      toast.error("Você precisa informar o Cnpj.");
     }
 
     if (form.zipCode === undefined || form.zipCode === null || form.zipCode === "") {
@@ -95,7 +99,7 @@ export function CreateProviderForm() {
       form.district === ""
     ) {
       hasError = true;
-      validationState.zipcode = "error";
+      validationState.district = "error";
       toast.error("Você precisa informar o bairro.");
     }
 
@@ -154,6 +158,14 @@ export function CreateProviderForm() {
     );
   };
 
+  const onChangeCnpj = (event) => {
+    setCnpjWithMask(cnpjMask(event.target.value));
+  };
+
+  const onChangeZipCode = (event) => {
+    setZipCodeWithMask(zipCodeMask(event.target.value));
+  };
+
   function onSubmit(form) {
     if (!validationBeforeCreate()) {
       createNewProvider(form);
@@ -203,8 +215,10 @@ export function CreateProviderForm() {
                   name="cnpj"
                   maxLength="18"
                   placeholder="Ex: 00.623.904/0001-73"
+                  value={cnpjWithMask}
+                  onChange={onChangeCnpj}
                   style={
-                    validationState.password !== undefined
+                    validationState.cnpj !== undefined
                       ? { border: "1px solid red" }
                       : {}
                   }
@@ -230,8 +244,10 @@ export function CreateProviderForm() {
                   defaultValue=""
                   placeholder="Ex: 09112-000"
                   onBlur={viacepSearch}
+                  value={zipCodeWithMask}
+                  onChange={onChangeZipCode}
                   style={
-                    validationState.zipcode !== undefined
+                    validationState.zipCode !== undefined
                       ? { border: "1px solid red" }
                       : {}
                   }
