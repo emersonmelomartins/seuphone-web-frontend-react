@@ -1,11 +1,16 @@
-import React, { useEffect } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useLoading } from "../../../hooks/useLoading";
 import { UpdateUserAddress } from "../../../services/userService";
+import { zipCodeMask } from "../../../util/zipCodeMask";
 
 export function AddressTab({ userInfo }) {
   const { register, setValue, handleSubmit } = useForm();
+
+  
+  const [zipCodeWithMask, setZipCodeWithMask] = useState("");
 
   const { setLoading } = useLoading();
 
@@ -18,10 +23,39 @@ export function AddressTab({ userInfo }) {
     setValue("houseNumber", userInfo.houseNumber);
   }, [setValue, userInfo]);
 
+
+    async function viacepSearch(event) {
+    const valor = event.target.value;
+    var cep = valor.replace(/\D/g, "");
+
+    if (cep !== "") {
+      var validacep = /^[0-9]{8}$/;
+
+      if (validacep.test(cep)) {
+        setValue("city", "...");
+        setValue("district", "...");
+        setValue("address", "...");
+
+        const response = await axios.get(
+          "https://viacep.com.br/ws/" + cep + "/json/"
+        );
+
+        const viacep = response.data;
+
+        setValue("city", viacep.localidade);
+        setValue("district", viacep.bairro);
+        setValue("address", viacep.logradouro);
+      } else {
+        toast.error("Cep inválido!");
+      }
+    }
+  }
+
   const onSubmit = (form) => {
     const obj = {
       id: userInfo.id,
       ...form,
+      zipCode: zipCodeWithMask
     };
 
     setLoading(true);
@@ -52,21 +86,30 @@ export function AddressTab({ userInfo }) {
     );
   };
 
+    const onChangeZipCode = (event) => {
+    setZipCodeWithMask(zipCodeMask(event.target.value));
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="form-row">
-          <div className="form-group col-md-4">
-            <label htmlFor="zipCode">CEP</label>
-            <input
-              type="text"
-              className="form-control"
-              id="zipCode"
-              name="zipCode"
-              {...register("zipCode")}
-            />
+          <div className="form-row">
+            <div className="form-group col-md-4">
+              <label htmlFor="zipCode">CEP</label>
+              <input
+                {...register("zipCode")}
+                type="text"
+                className="form-control"
+                id="zipCode"
+                name="zipCode"
+                maxLength="9"
+                placeholder="Ex: 09112-000"
+                onBlur={viacepSearch}
+                value={zipCodeWithMask}
+                onChange={onChangeZipCode}
+              />
+            </div>
           </div>
-        </div>
 
         <div className="form-row">
           <div className="form-group col-md-8">

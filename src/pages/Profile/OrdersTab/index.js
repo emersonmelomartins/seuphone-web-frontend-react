@@ -1,12 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
+import { saveAs } from "file-saver";
 import { MdPictureAsPdf } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { GetAllOrderByUser } from "../../../services/orderService";
+import { GetAllOrderByUser, GetOrderPDF } from "../../../services/orderService";
 import { formatPrice } from "../../../util/formatPrice";
 import { Orders } from "../styles";
+import { useLoading } from "../../../hooks/useLoading";
+import { toast } from "react-toastify";
 
 export function OrdersTab({ userid }) {
+  const { setLoading } = useLoading();
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -14,8 +18,10 @@ export function OrdersTab({ userid }) {
   }, []);
 
   const _getAllOrderByUser = (userid) => {
+    setLoading(true);
     GetAllOrderByUser(userid).then(
       (resp) => {
+        setLoading(false);
         const updatedData = resp.data.map((item) => {
           return {
             ...item,
@@ -25,7 +31,58 @@ export function OrdersTab({ userid }) {
         });
         setOrders(updatedData);
       },
-      (error) => {}
+      (error) => {
+        setLoading(false);
+        try {
+          const erro = error.response.data;
+          if (erro !== undefined) {
+            if (typeof erro.errors === "object") {
+              Object.values(erro.errors).forEach((e) => {
+                toast.error(e[0]);
+              });
+            } else {
+              toast.error(erro);
+            }
+          } else {
+            toast.error("Não foi possível carregar os dados.");
+          }
+        } catch (e) {
+          toast.error("Ocorreu um erro interno.");
+        }
+      }
+    );
+  };
+
+  const _getOrderPDF = (id) => {
+    setLoading(true);
+    GetOrderPDF(id).then(
+      (resp) => {
+        setLoading(false);
+        const file = new Blob([resp.data], { type: "application/pdf" });
+
+        const fileURL = URL.createObjectURL(file);
+
+        saveAs(fileURL, `seuphone-pedido-${id}.pdf`);
+      },
+      (error) => {
+        setLoading(false);
+        try {
+          const erro = error.response.data;
+          if (erro !== undefined) {
+            if (typeof erro.errors === "object") {
+              Object.values(erro.errors).forEach((e) => {
+                toast.error(e[0]);
+              });
+            } else {
+              toast.error(erro);
+            }
+          } else {
+            toast.error("Não foi possível carregar os dados.");
+          }
+        } catch (e) {
+          toast.error("Ocorreu um erro interno.");
+        }
+      }
     );
   };
 
@@ -57,16 +114,13 @@ export function OrdersTab({ userid }) {
                   <strong>{order.formattedTotal}</strong>
                 </td>
                 <td>
-                  <button type="button">
+                  <button type="button" onClick={() => _getOrderPDF(order.id)}>
                     <MdPictureAsPdf size={20} />
                   </button>
                 </td>
                 <td>
                   <Link to={"/user-order-detail/" + order.id}>
-                    <button>
-                      Ver detalhes
-
-                    </button>
+                    <button>Ver detalhes</button>
                   </Link>
                 </td>
               </tr>

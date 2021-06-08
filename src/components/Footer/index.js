@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FooterContainer } from './styles';
 
 export function Footer() {
@@ -25,24 +26,19 @@ export function Footer() {
 
               <ul className="list-unstyled mb-0">
                 <li>
-                  <a href="#!" className="text-light">
+                  <Link to="/" className="text-light">
                     Home
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#!" className="text-light">
+                  <Link to="/products" className="text-light">
                     Produtos
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#!" className="text-light">
+                  <Link to="/about" className="text-light">
                     Sobre
-                  </a>
-                </li>
-                <li>
-                  <a href="#!" className="text-light">
-                    Contato
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

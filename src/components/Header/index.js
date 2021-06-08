@@ -112,6 +112,7 @@ export function Header() {
           </Cart>
         </div>
 
+
         <div className="container">
           <Navbar.Collapse>
             <Nav className="mr-auto d-block">
@@ -123,6 +124,11 @@ export function Header() {
               <Nav.Item>
                 <Nav.Link eventKey="2" as={Link} to="/products">
                   Produtos
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="3" as={Link} to="/about">
+                  Sobre
                 </Nav.Link>
               </Nav.Item>
             </Nav>

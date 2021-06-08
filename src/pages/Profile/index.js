@@ -9,16 +9,23 @@ import { DataTab } from "./DataTab";
 import { toast } from "react-toastify";
 import { AddressTab } from "./AddressTab";
 import { useLoading } from "../../hooks/useLoading";
+import { useLocation } from "react-router";
+import { PasswordTab } from "./PasswordTab";
 
 export function Profile() {
   const { user } = useAuth();
   const { setLoading } = useLoading();
+  const location = useLocation();
 
   const [userInfo, setUserInfo] = useState({});
 
+
   const userid = user.decodedToken.nameid;
+  const urlParams =
+new URLSearchParams(location.search).get("tab") ?? "";
 
   useEffect(() => {
+
     _getUser();
   }, []);
 
@@ -62,7 +69,7 @@ export function Profile() {
         <div className="bg-light p-5 mx-auto styled-form">
           <h1 className="py-2 text-uppercase">Perfil</h1>
 
-          <Tab.Container id="left-tabs-example" defaultActiveKey="orders">
+          <Tab.Container id="left-tabs-example" defaultActiveKey={urlParams !== "" ? urlParams : "orders"}>
             <div className="row">
               <div className="col-sm-2">
                 <Nav variant="pills" className="flex-column">
@@ -74,6 +81,9 @@ export function Profile() {
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="address">Endereço</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="password">Senha</Nav.Link>
                   </Nav.Item>
                 </Nav>
               </div>
@@ -87,6 +97,9 @@ export function Profile() {
                   </Tab.Pane>
                   <Tab.Pane eventKey="address">
                     <AddressTab userInfo={userInfo} />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="password">
+                    <PasswordTab userInfo={userInfo} />
                   </Tab.Pane>
                 </Tab.Content>
               </div>

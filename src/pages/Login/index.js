@@ -4,7 +4,6 @@ import { LoginContainer } from "./styles";
 
 import { useAuth } from "../../hooks/useAuth";
 import { useHistory } from "react-router";
-import { Alert } from "react-bootstrap";
 
 export function Login() {
   const { register, getValues } = useForm();
@@ -49,23 +48,18 @@ export function Login() {
               placeholder="*******"
             />
           </div>
-          <Alert variant="success">
+          {/* <Alert variant="success">
             <p>Usuário para testes</p>
             <span>Login: bob.brown@gmail.com</span>
             <br />
             <span>Senha: 654321</span>
-          </Alert>
-          {/* POSSÍVEL FUNÇÃO "LEMBRAR LOGIN" */}
-          {/* <div className="form-check">
-            <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-          <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
-          </div> */}
+          </Alert> */}
           <ul className="p-0 my-1">
             <li>
               <a href="/register">Novo cadastro</a>
             </li>
             <li>
-              <a href="/">Esqueci minha senha</a>
+              <a href="/forgot-password">Esqueci minha senha</a>
             </li>
           </ul>
 

@@ -19,6 +19,8 @@ import { CreateProductForm } from '../pages/panel/ProductsTab/CreateProductForm'
 import { EditProductForm } from '../pages/panel/ProductsTab/EditProductForm';
 import { CreateProviderForm } from '../pages/panel/ProvidersTab/CreateProviderForm';
 import { EditProviderForm } from '../pages/panel/ProvidersTab/EditProviderForm';
+import { About } from '../pages/About';
+import { ForgotPassword } from '../pages/ForgotPassword';
 
 export function Routes() {
 
@@ -26,7 +28,11 @@ export function Routes() {
     <Switch>
       <Route path="/" exact component={Home} />
 
+      <Route path="/about" exact component={About} />
+
       <Route path="/login" exact component={Login} />
+
+      <Route path="/forgot-password" exact component={ForgotPassword} />
 
       <Route path="/register" exact component={Register} />
 
@@ -47,18 +53,15 @@ export function Routes() {
       <PrivateRoute path="/cart-payment" exact component={CartPayment} />
 
       <PrivateRoute path="/create-user-admin" exact component={CreateUserForm} />
-
       <PrivateRoute path="/update-user/:id" exact component={EditUserForm} />
 
       <PrivateRoute path="/panel/create-order/" exact component={EditOrderForm} />
       <PrivateRoute path="/panel/update-order/:id" exact component={EditOrderForm} />
       
       <PrivateRoute path="/create-product" exact component={CreateProductForm} />
-
       <PrivateRoute path="/update-product/:id" exact component={EditProductForm} />
 
       <PrivateRoute path="/create-provider" exact component={CreateProviderForm} />
-
       <PrivateRoute path="/update-provider/:id" exact component={EditProviderForm} />
 
     </Switch>

@@ -112,24 +112,9 @@ select.form-control {
   border-radius: 20px;
 }
 
-/*products in home*/
-.product-card {
-  width: 14.2rem;
-  box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.1);
-  margin-right: 5.3px;
-  margin-bottom: 5px;
-}
-
-.product-card img {
-  width: 150px;
-  display: block;
-  text-align: center;
-  margin: 10px auto 0;
-}
-
 /*contract in home*/
 .contract-container > div {
-  box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.2);
   border-radius: 0.25rem;
 }
 
