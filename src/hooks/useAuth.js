@@ -47,9 +47,23 @@ export function AuthProvider({ children }) {
         setLoading(false);
       },
       (error) => {
-        const erro = error.response.data;
-        toast.error(erro);
         setLoading(false);
+        try {
+          const erro = error.response.data;
+          if (erro !== undefined) {
+            if (typeof erro.errors === "object") {
+              Object.values(erro.errors).forEach((e) => {
+                toast.error(e[0]);
+              });
+            } else {
+              toast.error(erro);
+            }
+          } else {
+            toast.error("Não foi possível carregar os dados.");
+          }
+        } catch (e) {
+          toast.error("Ocorreu um erro interno.");
+        }
       }
     );
   }
