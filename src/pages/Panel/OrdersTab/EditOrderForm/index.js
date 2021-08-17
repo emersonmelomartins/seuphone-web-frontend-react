@@ -328,9 +328,9 @@ export function EditOrderForm() {
 
     if (
       isNew &&
-      form.paymentMethod === undefined ||
+      (form.paymentMethod === undefined ||
       form.paymentMethod === null ||
-      form.paymentMethod === ""
+      form.paymentMethod === "")
     ) {
       hasError = true;
       validationState.paymentMethod = "error";

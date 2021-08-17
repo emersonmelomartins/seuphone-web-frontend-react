@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const baseURL =  'https://localhost:44361/api'; // local
+export const baseURL =  'https://localhost:5001/api'; // local
 // export const baseURL =  "http://api.emersonmelomartins.dev.br/api"; // cloud
 
 const api = axios.create({
