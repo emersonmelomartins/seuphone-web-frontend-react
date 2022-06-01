@@ -20,8 +20,9 @@ OBS: Você pode consultar tudo sobre a aplicação no documento localizado na pa
 </p>
 
 ## Demonstração
-Você pode acessar a demonstração da página acessando [este link.](https://emersonmelomartins.dev.br/)
-E também a documentação das apis [acessando aqui.](http://api.emersonmelomartins.dev.br/index.html)
+Servidor desligado.
+~~Você pode acessar a demonstração da página acessando [este link.](https://emersonmelomartins.dev.br/)~~
+~~E também a documentação das apis [acessando aqui.](http://api.emersonmelomartins.dev.br/index.html)~~
 
 ```sh
 # usuário administrador para testes.
